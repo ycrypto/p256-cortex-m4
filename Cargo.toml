@@ -1,0 +1,18 @@
+[package]
+name = "p256-cortex-m4-sys"
+description = "Low-level bindings to P256-Cortex-M4"
+version = "0.1.0"
+authors = ["Nicolas Stalder <n@stalder.io>"]
+edition = "2018"
+license = "MIT"
+readme = "README.md"
+categories = ["embedded", "no-std", "cryptography"]
+keywords = ["no-std", "nist", "cryptography", "signatures", "cortex-m"]
+repository = "https://github.com/ycrypto/p256-cortex-m4-sys"
+
+[dependencies]
+cty = "0.2.1"
+
+[build-dependencies]
+bindgen = { version = "0.56.0", default-features = false }
+cc = "1"
