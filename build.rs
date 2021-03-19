@@ -1,4 +1,3 @@
-use std::cfg;
 use std::env;
 use std::path::PathBuf;
 
@@ -15,10 +14,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut builder = cc::Build::new();
 
-    let mut builder = builder
+    let builder = builder
         .flag("-std=c11")
-        .file("P256-Cortex_M4/p256-cortex-m4.c")
-        .file("P256-Cortex_M4/p256-cortex-m4-asm-gcc.S")
+        .file("P256-Cortex-M4/p256-cortex-m4.c")
+        .file("P256-Cortex-M4/p256-cortex-m4-asm-gcc.S")
         .flag("-march=armv7e-m")
     ;
 
@@ -27,7 +26,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
     let bindings = bindgen::Builder::default()
-        .header("P256-Cortex_M4/p256-cortex-m4.h")
+        .header("P256-Cortex-M4/p256-cortex-m4.h")
         .clang_arg(format!("--target={}", target))
         .use_core()
         .ctypes_prefix("cty")
