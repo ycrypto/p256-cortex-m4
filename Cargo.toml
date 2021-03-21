@@ -1,7 +1,7 @@
 [package]
 name = "p256-cortex-m4"
 description = "Idiomatic, misuse-resistent bindings to P256-Cortex-M4"
-version = "0.1.0-alpha.1"
+version = "0.1.0-alpha.2"
 authors = ["Nicolas Stalder <n@stalder.io>"]
 edition = "2018"
 license = "MIT"
@@ -17,14 +17,21 @@ rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 der = { version = "0.2.9", features = ["big-uint", "derive"], optional = true }
-# p256 = { version = "0.8.0-pre", default-features = false, features = ["ecdsa-core", "zeroize"] }
-p256-cortex-m4-sys = "0.1.0-alpha.1"
-# p256-cortex-m4-sys = { path = "../p256-cortex-m4-sys" }
+ecdsa = { version = "0.10", package = "ecdsa", default-features = false, optional = true }
+elliptic-curve = { version = "0.8", default-features = false, optional = true }
+p256-cortex-m4-sys = "0.1.0-alpha.2"
 rand_core = { version = "0.5.1", default-features = false }
 sha2 = { version = "0.9", default-features = false, optional = true }
 zeroize = { version = "1.2.0", default-features = false, features = ["zeroize_derive"] }
 
+[dependencies.p256]
+version = "0.7.2"
+default-features = false
+features = ["arithmetic", "ecdh", "ecdsa", "sha256", "zeroize"]
+optional = true
+
 [features]
-default = []
+default = ["non-cortex-m4-fallback"]
 der-signatures = ["der"]
 prehash = ["sha2"]
+non-cortex-m4-fallback = ["ecdsa", "elliptic-curve", "p256"]

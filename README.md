@@ -20,7 +20,12 @@
   </a>
   <!-- API docs -->
   <a href="https://docs.rs/p256-cortex-m4">
-    <img src="https://img.shields.io/badge/docs-latest-blue.svg?style=flat-square"
+    <img src="https://img.shields.io/badge/docs-release-blue.svg?style=flat-square"
+      alt="latest release API docs" />
+  </a>
+  <!-- API docs -->
+  <a href="https://ycrypto.github.io/p256-cortex-m4">
+    <img src="https://img.shields.io/badge/docs-main-blue.svg?style=flat-square"
       alt="main branch API docs" />
   </a>
 </div>
@@ -36,7 +41,10 @@ Idiomatic, misuse-resistant bindings for the glorious and ultra-fast
 
 ## Building / Usage
 
-This library only builds on Cortex-M4 and Cortex-M33 platforms.
+On platforms other than Cortex-M4 and Cortex-M33, the implementation from `p256`
+is re-used, with the same (simplified) API.
+
+If this fallback is not desired, deactivate the `non-cortex-m4-fallback` feature.
 
 
 #### License
