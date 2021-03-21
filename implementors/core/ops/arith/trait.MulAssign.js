@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["p256"] = [{"text":"impl MulAssign&lt;Scalar&gt; for ProjectivePoint","synthetic":false,"types":[]},{"text":"impl MulAssign&lt;&amp;'_ Scalar&gt; for ProjectivePoint","synthetic":false,"types":[]},{"text":"impl MulAssign&lt;Scalar&gt; for Scalar","synthetic":false,"types":[]},{"text":"impl MulAssign&lt;&amp;'_ Scalar&gt; for Scalar","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

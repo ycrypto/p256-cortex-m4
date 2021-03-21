@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["p256"] = [{"text":"impl SubAssign&lt;ProjectivePoint&gt; for ProjectivePoint","synthetic":false,"types":[]},{"text":"impl SubAssign&lt;&amp;'_ ProjectivePoint&gt; for ProjectivePoint","synthetic":false,"types":[]},{"text":"impl SubAssign&lt;AffinePoint&gt; for ProjectivePoint","synthetic":false,"types":[]},{"text":"impl SubAssign&lt;&amp;'_ AffinePoint&gt; for ProjectivePoint","synthetic":false,"types":[]},{"text":"impl SubAssign&lt;Scalar&gt; for Scalar","synthetic":false,"types":[]},{"text":"impl SubAssign&lt;&amp;'_ Scalar&gt; for Scalar","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,4 @@
+(function() {var implementors = {};
+implementors["bitvec"] = [{"text":"impl&lt;M&gt; Sum&lt;BitSel&lt;M&gt;&gt; for BitMask&lt;M&gt; <span class=\"where fmt-newline\">where<br>&nbsp;&nbsp;&nbsp;&nbsp;M: BitMemory,&nbsp;</span>","synthetic":false,"types":[]}];
+implementors["p256"] = [{"text":"impl Sum&lt;ProjectivePoint&gt; for ProjectivePoint","synthetic":false,"types":[]},{"text":"impl&lt;'a&gt; Sum&lt;&amp;'a ProjectivePoint&gt; for ProjectivePoint","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
