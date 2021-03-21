@@ -1,4 +1,4 @@
-use core::convert::TryInto;
+use core::{convert::TryInto, mem::MaybeUninit};
 
 use rand_core::{CryptoRng, RngCore};
 use zeroize::{Zeroize, Zeroizing};
@@ -205,6 +205,18 @@ impl SecretKey {
 }
 
 impl PublicKey {
+    /// Decode assuming `bytes` is x-coordinate then y-coordinate, both big-endian 32B arrays.
+    ///
+    /// In other words, the uncompressed SEC1 format, without the leading 0x04 byte tag.
+    pub fn from_untagged_bytes(bytes: &[u8]) -> Result<Self> {
+        if bytes.len() != 64 {
+            return Err(Error);
+        }
+        let mut sec1_bytes = [4u8; 65];
+        sec1_bytes[1..].copy_from_slice(bytes);
+        Self::from_sec1_bytes(&sec1_bytes)
+    }
+
     /// Decode `PublicKey` (compressed or uncompressed) from the
     /// `Elliptic-Curve-Point-to-Octet-String` encoding in [SEC 1][sec-1] (section 2.3.3)
     ///
@@ -212,6 +224,7 @@ impl PublicKey {
     ///
     /// [sec-1]: http://www.secg.org/sec1-v2.pdf
     pub fn from_sec1_bytes(bytes: &[u8]) -> Result<Self> {
+        // NB: https://doc.rust-lang.org/std/mem/union.MaybeUninit.html#initializing-a-struct-field-by-field
         let mut public = PublicKey {
             x: [0u32; 8],
             y: [0u32; 8],
@@ -228,49 +241,45 @@ impl PublicKey {
         }
     }
 
-    /// Decode assuming `bytes` is x-coordinate then y-coordinate, both big-endian 32B arrays.
-    ///
-    /// In other words, the uncompressed SEC1 format, without the leading 0x04 byte.
-    pub fn from_untagged_bytes(bytes: &[u8]) -> Result<Self> {
-        if bytes.len() != 64 {
-            return Err(Error);
-        }
-        let mut sec1_bytes = [4u8; 65];
-        sec1_bytes[1..].copy_from_slice(bytes);
-        Self::from_sec1_bytes(&sec1_bytes)
+    /// Raw encoding, x-coordinate then y-coordinate.
+    pub fn to_untagged_bytes(&self) -> [u8; 64] {
+        self.to_uncompressed_sec1_bytes()[1..].try_into().unwrap()
     }
 
     /// Compressed encoding: `02 || Px` if Py is even and `03 || Px` if Py is odd
-    pub fn to_compressed_bytes(&self) -> [u8; 33] {
-        let mut bytes = [0u8; 33];
-        unsafe { p256_cortex_m4_sys::p256_point_to_octet_string_compressed(
-            &mut bytes[0] as *mut _,
-            &self.x[0] as *const _,
-            &self.y[0] as *const _,
-        ) };
-        bytes
+    pub fn to_compressed_sec1_bytes(&self) -> [u8; 33] {
+        let mut bytes = MaybeUninit::<[u8; 33]>::uninit();
+        unsafe {
+            p256_cortex_m4_sys::p256_point_to_octet_string_uncompressed(
+                bytes.as_mut_ptr() as *mut _,
+                &self.x[0] as *const _,
+                &self.y[0] as *const _,
+            );
+            bytes.assume_init()
+        }
     }
 
     /// Uncompressed encoding: `04 || Px || Py`.
-    pub fn to_uncompressed_bytes(&self) -> [u8; 65] {
-        let mut bytes = [0u8; 65];
-        unsafe { p256_cortex_m4_sys::p256_point_to_octet_string_uncompressed(
-            &mut bytes[0] as *mut _,
-            &self.x[0] as *const _,
-            &self.y[0] as *const _,
-        ) };
-        bytes
+    pub fn to_uncompressed_sec1_bytes(&self) -> [u8; 65] {
+        let mut bytes = MaybeUninit::<[u8; 65]>::uninit();
+        unsafe {
+            p256_cortex_m4_sys::p256_point_to_octet_string_uncompressed(
+                bytes.as_mut_ptr() as *mut _,
+                &self.x[0] as *const _,
+                &self.y[0] as *const _,
+            );
+            bytes.assume_init()
+        }
     }
 
     /// Big-endian representation of x-coordinate.
     pub fn x(&self) -> [u8; 32] {
-        self.to_uncompressed_bytes()[1..33].try_into().unwrap()
-
+        self.to_uncompressed_sec1_bytes()[1..33].try_into().unwrap()
     }
 
     /// Big-endian representation of x-coordinate.
     pub fn y(&self) -> [u8; 32] {
-        self.to_uncompressed_bytes()[33..].try_into().unwrap()
+        self.to_uncompressed_sec1_bytes()[33..].try_into().unwrap()
     }
 
     /// Verify signature on message assumed to be hashed, if needed.
@@ -297,24 +306,28 @@ impl PublicKey {
 impl Signature {
     /// Big-endian representation of r.
     fn r(&self) -> [u8; 32] {
-        let mut r = [0u8; 32];
-        unsafe { p256_cortex_m4_sys::p256_convert_endianness(
-            &mut r[0] as *mut u8 as *mut _,
-            &self.r[0] as *const u32 as *const _,
-            32,
-        ) };
-        r
+        let mut r = MaybeUninit::<[u8; 32]>::uninit();
+        unsafe {
+            p256_cortex_m4_sys::p256_convert_endianness(
+                r.as_mut_ptr() as *mut u8 as *mut _,
+                &self.r[0] as *const u32 as *const _,
+                32,
+            );
+            r.assume_init()
+        }
     }
 
     /// Big-endian representation of s.
     fn s(&self) -> [u8; 32] {
-        let mut s = [0u8; 32];
-        unsafe { p256_cortex_m4_sys::p256_convert_endianness(
-            &mut s[0] as *mut u8 as *mut _,
-            &self.s[0] as *const u32 as *const _,
-            32,
-        ) };
-        s
+        let mut s = MaybeUninit::<[u8; 32]>::uninit();
+        unsafe {
+            p256_cortex_m4_sys::p256_convert_endianness(
+                s.as_mut_ptr() as *mut u8 as *mut _,
+                &self.s[0] as *const u32 as *const _,
+                32,
+            );
+            s.assume_init()
+        }
     }
 
     /// Decode signature as big-endian r, then big-endian s, without framing.
@@ -326,6 +339,7 @@ impl Signature {
             return Err(Error);
         }
 
+        // NB: https://doc.rust-lang.org/std/mem/union.MaybeUninit.html#initializing-a-struct-field-by-field
         let mut signature = Signature {
             r: [0u32; 8],
             s: [0u32; 8],

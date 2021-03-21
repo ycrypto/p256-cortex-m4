@@ -1,5 +1,7 @@
 use core::convert::TryInto;
 
+use ecdsa::hazmat::{SignPrimitive, VerifyPrimitive};
+use elliptic_curve::sec1::ToEncodedPoint;
 use rand_core::{CryptoRng, RngCore};
 
 use crate::{Error, Result};
@@ -79,10 +81,6 @@ impl SecretKey {
 
     /// Attempt at unraveling the traits in `p256`.
     pub fn sign_prehashed(&self, prehashed_message: &[u8], rng: impl CryptoRng + RngCore) -> Signature {
-        // use p256::ecdsa::signature::Signer;
-        // let signature = signer.sign(message);
-        // signature
-
         let prehashed_message_as_scalar = p256::Scalar::from_bytes_reduced(prehashed_message.try_into().unwrap());
         let mut rng = rng;
         let static_scalar = p256::Scalar::from_bytes_reduced(&self.0.to_bytes());
@@ -91,7 +89,6 @@ impl SecretKey {
             let ephemeral_scalar = p256::Scalar::from_bytes_reduced(&ephemeral_secret.to_bytes());
             let blinded_scalar = p256::BlindedScalar::new(ephemeral_scalar, &mut rng);
 
-            use ecdsa::hazmat::SignPrimitive;
             if let Ok(signature) = static_scalar.try_sign_prehashed(
                 &blinded_scalar,
                 &prehashed_message_as_scalar,
@@ -113,17 +110,26 @@ impl SecretKey {
 
     /// ECDH key agreement.
     pub fn agree(&self, other: &PublicKey) -> SharedSecret {
-
-        let shared_secret = elliptic_curve::ecdh::diffie_hellman(
+        SharedSecret(elliptic_curve::ecdh::diffie_hellman(
             self.0.secret_scalar(),
             other.0.as_affine(),
-        );
-
-        SharedSecret(shared_secret)
+        ))
     }
 }
 
 impl PublicKey {
+   /// Decode assuming `bytes` is x-coordinate then y-coordinate, both big-endian 32B arrays.
+   ///
+   /// In other words, the uncompressed SEC1 format, without the leading 0x04 byte tag.
+   pub fn from_untagged_bytes(bytes: &[u8]) -> Result<Self> {
+       if bytes.len() != 64 {
+           return Err(Error);
+       }
+       let mut sec1_bytes = [4u8; 65];
+       sec1_bytes[1..].copy_from_slice(bytes);
+       Self::from_sec1_bytes(&sec1_bytes)
+   }
+
     /// Decode `PublicKey` (compressed or uncompressed) from the
     /// `Elliptic-Curve-Point-to-Octet-String` encoding in [SEC 1][sec-1] (section 2.3.3)
     ///
@@ -134,51 +140,34 @@ impl PublicKey {
        Ok(PublicKey(p256::PublicKey::from_sec1_bytes(bytes)?))
    }
 
-   /// Decode assuming `bytes` is x-coordinate then y-coordinate, both big-endian 32B arrays.
-   ///
-   /// In other words, the uncompressed SEC1 format, without the leading 0x04 byte.
-   pub fn from_untagged_bytes(bytes: &[u8]) -> Result<Self> {
-       if bytes.len() != 64 {
-           return Err(Error);
-       }
-       let mut sec1_bytes = [4u8; 65];
-       sec1_bytes[1..].copy_from_slice(bytes);
-       Self::from_sec1_bytes(&sec1_bytes)
-   }
+    /// Raw encoding, x-coordinate then y-coordinate.
+    pub fn to_untagged_bytes(&self) -> [u8; 64] {
+       self.0.to_encoded_point(false).as_ref()[1..].as_ref().try_into().unwrap()
+    }
 
    /// Compressed encoding: `02 || Px` if Py is even and `03 || Px` if Py is odd
-   pub fn to_compressed_bytes(&self) -> [u8; 33] {
-       use elliptic_curve::sec1::ToEncodedPoint;
-       let encoded_point = self.0.to_encoded_point(true);
-       let mut bytes = [0u8; 33];
-       bytes.copy_from_slice(encoded_point.as_bytes());
-       bytes
+   pub fn to_compressed_sec1_bytes(&self) -> [u8; 33] {
+       self.0.to_encoded_point(true).as_ref().try_into().unwrap()
    }
 
    /// Uncompressed encoding: `04 || Px || Py`.
-   pub fn to_uncompressed_bytes(&self) -> [u8; 65] {
-       use elliptic_curve::sec1::ToEncodedPoint;
-       let encoded_point = self.0.to_encoded_point(false);
-       let mut bytes = [0u8; 65];
-       bytes.copy_from_slice(encoded_point.as_bytes());
-       bytes
+   pub fn to_uncompressed_sec1_bytes(&self) -> [u8; 65] {
+       self.0.to_encoded_point(false).as_ref().try_into().unwrap()
    }
 
    /// Big-endian representation of x-coordinate.
    pub fn x(&self) -> [u8; 32] {
-       self.to_uncompressed_bytes()[1..33].try_into().unwrap()
+       self.0.to_encoded_point(false).as_ref()[1..33].try_into().unwrap()
    }
 
    /// Big-endian representation of x-coordinate.
    pub fn y(&self) -> [u8; 32] {
-       self.to_uncompressed_bytes()[33..].try_into().unwrap()
+       self.0.to_encoded_point(false).as_ref()[33..].try_into().unwrap()
    }
 
    /// Verify signature on message assumed to be hashed, if needed.
    pub fn verify_prehashed(&self, prehashed_message: &[u8], signature: &Signature) -> bool {
        let prehashed_message_as_scalar = p256::Scalar::from_bytes_reduced(prehashed_message.try_into().unwrap());
-       use ecdsa::hazmat::VerifyPrimitive;
-
        self.0.as_affine().verify_prehashed(&prehashed_message_as_scalar, &signature.0).is_ok()
    }
 
@@ -194,27 +183,15 @@ impl PublicKey {
 }
 
 impl Signature {
-    // /// Big-endian representation of r.
-    // pub fn r(&self) -> [u8; 32] {
-    //     let mut r = [0u8; 32];
-    //     unsafe { p256_cortex_m4_sys::p256_convert_endianness(
-    //         &mut r[0] as *mut u8 as *mut _,
-    //         &self.r[0] as *const u32 as *const _,
-    //         32,
-    //     ) };
-    //     r
-    // }
+    /// Big-endian representation of r.
+    pub fn r(&self) -> [u8; 32] {
+        self.0.r().as_ref().to_bytes().into()
+    }
 
-    // /// Big-endian representation of s.
-    // pub fn s(&self) -> [u8; 32] {
-    //     let mut s = [0u8; 32];
-    //     unsafe { p256_cortex_m4_sys::p256_convert_endianness(
-    //         &mut s[0] as *mut u8 as *mut _,
-    //         &self.s[0] as *const u32 as *const _,
-    //         32,
-    //     ) };
-    //     s
-    // }
+    /// Big-endian representation of s.
+    pub fn s(&self) -> [u8; 32] {
+        self.0.s().as_ref().to_bytes().into()
+    }
 
    /// Decode signature as big-endian r, then big-endian s, without framing.
    ///
@@ -226,9 +203,7 @@ impl Signature {
 
    /// Encode signature from big-endian r, then big-endian s, without framing.
    pub fn to_bytes(&self) -> [u8; 64] {
-       let mut bytes = [0u8; 64];
-       bytes.copy_from_slice(self.0.as_ref());
-       bytes
+       self.0.as_ref().try_into().unwrap()
    }
 
    /// Decode signature from ASN.1 DER

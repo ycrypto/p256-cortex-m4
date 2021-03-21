@@ -19,6 +19,8 @@ pub struct Error;
 /// Result type.
 pub type Result<T> = core::result::Result<T, Error>;
 
+// pub mod traits;
+
 /// Convenience function, calculates SHA256 hash digest of a slice of bytes.
 #[cfg(feature = "prehash")]
 #[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
