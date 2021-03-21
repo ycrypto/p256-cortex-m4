@@ -1,0 +1,4 @@
+[toolchain]
+channel = "stable"
+targets = ["thumbv7em-none-eabi", "thumbv7em-none-eabihf", "thumbv8m.main-none-eabi", "thumbv8m.main-none-eabihf"]
+profile = "minimal"
