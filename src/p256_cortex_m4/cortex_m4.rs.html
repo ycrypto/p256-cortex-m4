@@ -405,8 +405,22 @@
 <span id="402">402</span>
 <span id="403">403</span>
 <span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>;
+<span class="kw">use</span> <span class="ident">core</span>::{<span class="ident">convert</span>::<span class="ident">TryInto</span>, <span class="ident">mem</span>::<span class="ident">MaybeUninit</span>};
 
 <span class="kw">use</span> <span class="ident">rand_core</span>::{<span class="ident">CryptoRng</span>, <span class="ident">RngCore</span>};
 <span class="kw">use</span> <span class="ident">zeroize</span>::{<span class="ident">Zeroize</span>, <span class="ident">Zeroizing</span>};
@@ -613,6 +627,18 @@
 }
 
 <span class="kw">impl</span> <span class="ident">PublicKey</span> {
+    <span class="doccomment">/// Decode assuming `bytes` is x-coordinate then y-coordinate, both big-endian 32B arrays.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// In other words, the uncompressed SEC1 format, without the leading 0x04 byte tag.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_untagged_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="number">64</span> {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>);
+        }
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sec1_bytes</span> <span class="op">=</span> [<span class="number">4u8</span>; <span class="number">65</span>];
+        <span class="ident">sec1_bytes</span>[<span class="number">1</span>..].<span class="ident">copy_from_slice</span>(<span class="ident">bytes</span>);
+        <span class="self">Self</span>::<span class="ident">from_sec1_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">sec1_bytes</span>)
+    }
+
     <span class="doccomment">/// Decode `PublicKey` (compressed or uncompressed) from the</span>
     <span class="doccomment">/// `Elliptic-Curve-Point-to-Octet-String` encoding in [SEC 1][sec-1] (section 2.3.3)</span>
     <span class="doccomment">///</span>
@@ -620,6 +646,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [sec-1]: http://www.secg.org/sec1-v2.pdf</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_sec1_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="comment">// NB: https://doc.rust-lang.org/std/mem/union.MaybeUninit.html#initializing-a-struct-field-by-field</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">public</span> <span class="op">=</span> <span class="ident">PublicKey</span> {
             <span class="ident">x</span>: [<span class="number">0u32</span>; <span class="number">8</span>],
             <span class="ident">y</span>: [<span class="number">0u32</span>; <span class="number">8</span>],
@@ -636,49 +663,45 @@
         }
     }
 
-    <span class="doccomment">/// Decode assuming `bytes` is x-coordinate then y-coordinate, both big-endian 32B arrays.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// In other words, the uncompressed SEC1 format, without the leading 0x04 byte.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_untagged_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="number">64</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>);
-        }
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sec1_bytes</span> <span class="op">=</span> [<span class="number">4u8</span>; <span class="number">65</span>];
-        <span class="ident">sec1_bytes</span>[<span class="number">1</span>..].<span class="ident">copy_from_slice</span>(<span class="ident">bytes</span>);
-        <span class="self">Self</span>::<span class="ident">from_sec1_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">sec1_bytes</span>)
+    <span class="doccomment">/// Raw encoding, x-coordinate then y-coordinate.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_untagged_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">64</span>] {
+        <span class="self">self</span>.<span class="ident">to_uncompressed_sec1_bytes</span>()[<span class="number">1</span>..].<span class="ident">try_into</span>().<span class="ident">unwrap</span>()
     }
 
     <span class="doccomment">/// Compressed encoding: `02 || Px` if Py is even and `03 || Px` if Py is odd</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_compressed_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">33</span>] {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> [<span class="number">0u8</span>; <span class="number">33</span>];
-        <span class="kw">unsafe</span> { <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_point_to_octet_string_compressed</span>(
-            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">bytes</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
-            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">x</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
-            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">y</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
-        ) };
-        <span class="ident">bytes</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_compressed_sec1_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">33</span>] {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">MaybeUninit</span>::<span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">33</span>]<span class="op">&gt;</span>::<span class="ident">uninit</span>();
+        <span class="kw">unsafe</span> {
+            <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_point_to_octet_string_uncompressed</span>(
+                <span class="ident">bytes</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">x</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">y</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
+            );
+            <span class="ident">bytes</span>.<span class="ident">assume_init</span>()
+        }
     }
 
     <span class="doccomment">/// Uncompressed encoding: `04 || Px || Py`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_uncompressed_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">65</span>] {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> [<span class="number">0u8</span>; <span class="number">65</span>];
-        <span class="kw">unsafe</span> { <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_point_to_octet_string_uncompressed</span>(
-            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">bytes</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
-            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">x</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
-            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">y</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
-        ) };
-        <span class="ident">bytes</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_uncompressed_sec1_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">65</span>] {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">MaybeUninit</span>::<span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">65</span>]<span class="op">&gt;</span>::<span class="ident">uninit</span>();
+        <span class="kw">unsafe</span> {
+            <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_point_to_octet_string_uncompressed</span>(
+                <span class="ident">bytes</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">x</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">y</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
+            );
+            <span class="ident">bytes</span>.<span class="ident">assume_init</span>()
+        }
     }
 
     <span class="doccomment">/// Big-endian representation of x-coordinate.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">x</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">32</span>] {
-        <span class="self">self</span>.<span class="ident">to_uncompressed_bytes</span>()[<span class="number">1</span>..<span class="number">33</span>].<span class="ident">try_into</span>().<span class="ident">unwrap</span>()
-
+        <span class="self">self</span>.<span class="ident">to_uncompressed_sec1_bytes</span>()[<span class="number">1</span>..<span class="number">33</span>].<span class="ident">try_into</span>().<span class="ident">unwrap</span>()
     }
 
     <span class="doccomment">/// Big-endian representation of x-coordinate.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">y</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">32</span>] {
-        <span class="self">self</span>.<span class="ident">to_uncompressed_bytes</span>()[<span class="number">33</span>..].<span class="ident">try_into</span>().<span class="ident">unwrap</span>()
+        <span class="self">self</span>.<span class="ident">to_uncompressed_sec1_bytes</span>()[<span class="number">33</span>..].<span class="ident">try_into</span>().<span class="ident">unwrap</span>()
     }
 
     <span class="doccomment">/// Verify signature on message assumed to be hashed, if needed.</span>
@@ -705,24 +728,28 @@
 <span class="kw">impl</span> <span class="ident">Signature</span> {
     <span class="doccomment">/// Big-endian representation of r.</span>
     <span class="kw">fn</span> <span class="ident">r</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">32</span>] {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">r</span> <span class="op">=</span> [<span class="number">0u8</span>; <span class="number">32</span>];
-        <span class="kw">unsafe</span> { <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_convert_endianness</span>(
-            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">r</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
-            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">r</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u32</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
-            <span class="number">32</span>,
-        ) };
-        <span class="ident">r</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">MaybeUninit</span>::<span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">32</span>]<span class="op">&gt;</span>::<span class="ident">uninit</span>();
+        <span class="kw">unsafe</span> {
+            <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_convert_endianness</span>(
+                <span class="ident">r</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">r</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u32</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
+                <span class="number">32</span>,
+            );
+            <span class="ident">r</span>.<span class="ident">assume_init</span>()
+        }
     }
 
     <span class="doccomment">/// Big-endian representation of s.</span>
     <span class="kw">fn</span> <span class="ident">s</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">32</span>] {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> [<span class="number">0u8</span>; <span class="number">32</span>];
-        <span class="kw">unsafe</span> { <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_convert_endianness</span>(
-            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
-            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">s</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u32</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
-            <span class="number">32</span>,
-        ) };
-        <span class="ident">s</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">MaybeUninit</span>::<span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">32</span>]<span class="op">&gt;</span>::<span class="ident">uninit</span>();
+        <span class="kw">unsafe</span> {
+            <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_convert_endianness</span>(
+                <span class="ident">s</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">s</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u32</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
+                <span class="number">32</span>,
+            );
+            <span class="ident">s</span>.<span class="ident">assume_init</span>()
+        }
     }
 
     <span class="doccomment">/// Decode signature as big-endian r, then big-endian s, without framing.</span>
@@ -734,6 +761,7 @@
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>);
         }
 
+        <span class="comment">// NB: https://doc.rust-lang.org/std/mem/union.MaybeUninit.html#initializing-a-struct-field-by-field</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">signature</span> <span class="op">=</span> <span class="ident">Signature</span> {
             <span class="ident">r</span>: [<span class="number">0u32</span>; <span class="number">8</span>],
             <span class="ident">s</span>: [<span class="number">0u32</span>; <span class="number">8</span>],

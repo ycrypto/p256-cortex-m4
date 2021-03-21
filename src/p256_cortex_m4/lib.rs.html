@@ -42,6 +42,8 @@
 <span id="39">39</span>
 <span id="40">40</span>
 <span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Idiomatic Rust bindings for [`P256-Cortex-M4`][p256-cortex-m4] in the spirit of [`p256`][p256].</span>
 <span class="doccomment">//!</span>
@@ -63,6 +65,8 @@
 
 <span class="doccomment">/// Result type.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">core</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+
+<span class="comment">// pub mod traits;</span>
 
 <span class="doccomment">/// Convenience function, calculates SHA256 hash digest of a slice of bytes.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;prehash&quot;</span>)]</span>
