@@ -40,11 +40,15 @@
 <span id="37">37</span>
 <span id="38">38</span>
 <span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Idiomatic Rust bindings for [`P256-Cortex-M4`][p256-cortex-m4] in the spirit of [`p256`][p256].</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! On platforms other than Cortex-M4 and Cortex-M33, the implementation from `p256` is re-used,</span>
 <span class="doccomment">//! with the same (simplified) API.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! If this fallback is not desired, deactivate the `non-cortex-m4-fallback` feature.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [p256-cortex-m4]: https://github.com/Emill/P256-Cortex-M4</span>
 <span class="doccomment">//! [p256]: https://docs.rs/p256/</span>
@@ -76,9 +80,9 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">cortex_m4</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">cortex_m4</span>::<span class="kw-2">*</span>;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">cortex_m4</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;non-cortex-m4-fallback&quot;</span>, <span class="ident">not</span>(<span class="ident">cortex_m4</span>)))]</span>
 <span class="kw">mod</span> <span class="ident">fallback</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">cortex_m4</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;non-cortex-m4-fallback&quot;</span>, <span class="ident">not</span>(<span class="ident">cortex_m4</span>)))]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">fallback</span>::<span class="kw-2">*</span>;
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "p256_cortex_m4";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
