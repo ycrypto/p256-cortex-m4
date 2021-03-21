@@ -1,6 +1,12 @@
-//! Idiomatic Rust bindings for `p256-cortex-m4` in the spirit of `p256`.
+//! Idiomatic Rust bindings for [`P256-Cortex-M4`][p256-cortex-m4] in the spirit of [`p256`][p256].
+//!
+//! Only builds on Cortex-M4 and Cortex-M33.
+//!
+//! [p256-cortex-m4]: https://github.com/Emill/P256-Cortex-M4
+//! [p256]: https://docs.rs/p256/
 
 #![no_std]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
 
 use core::convert::TryInto;
@@ -61,6 +67,7 @@ pub struct SharedSecret([u8; 32]);
 
 /// Convenience function, calculates SHA256 hash digest of a slice of bytes.
 #[cfg(feature = "prehash")]
+#[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
 pub fn sha256(message: &[u8]) -> [u8; 32] {
     use sha2::digest::Digest;
     let mut hash = sha2::Sha256::new();
@@ -126,9 +133,7 @@ impl SecretKey {
         secret
     }
 
-    /// Verifies that there are 8 words that correspond to a little-endian integer in the range 1..n-1.
-    ///
-    /// TODO: Upstream exposure of the underlying method in the header file.
+    /// Verifies that there are 8 words that correspond to a little-endian integer in the range 1..=n-1.
     pub fn from_words(bytes: impl AsRef<[u32]>) -> Option<Self> {
         if bytes.as_ref().len() != 8 {
             return None
@@ -193,6 +198,7 @@ impl SecretKey {
     }
 
     #[cfg(feature = "prehash")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
     /// Non-deterministic signature on message, which is hashed with SHA-256 first.
     pub fn sign(&self, message: &[u8], rng: impl CryptoRng + RngCore) -> Signature {
         let prehashed_message = sha256(message);
@@ -311,6 +317,7 @@ impl PublicKey {
 
     /// Verify signature on message, which is hashed with SHA-256 first.
     #[cfg(feature = "prehash")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
     pub fn verify(&self, message: &[u8], signature: &Signature) -> bool {
         let prehashed_message = sha256(message);
         self.verify_prehashed(prehashed_message.as_ref(), signature)
@@ -343,7 +350,7 @@ impl Signature {
     /// Decode signature as big-endian r, then big-endian s, without framing.
     ///
     /// Necessarily, bytes must be of length 64, and r and s must be integers
-    /// in the range 1..n-1, otherwise decoding fails.
+    /// in the range 1..=n-1, otherwise decoding fails.
     pub fn try_from_bytes(bytes: &[u8]) -> Result<Self> {
         if bytes.len() != 64 {
             return Err(Error);
@@ -396,6 +403,7 @@ impl Signature {
     ///
     /// This means interpreting signature as a SEQUENCE of (unsigned) INTEGERs.
     #[cfg(feature = "der-signatures")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "der-signatures")))]
     pub fn to_der(&self, buffer: &mut [u8; 72]) -> usize {
         let r = self.r();
         let s = self.s();
@@ -411,6 +419,7 @@ impl Signature {
 }
 
 #[cfg(feature = "der-signatures")]
+#[cfg_attr(docsrs, doc(cfg(feature = "der-signatures")))]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, der::Message)]
 struct DerSignature<'a> {
     pub r: der::BigUInt<'a, der::consts::U32>,

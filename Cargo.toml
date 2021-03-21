@@ -1,8 +1,17 @@
 [package]
 name = "p256-cortex-m4"
-version = "0.1.0-pre"
+description = "Idiomatic, misuse-resistent bindings to P256-Cortex-M4"
+version = "0.1.0-alpha.0"
 authors = ["Nicolas Stalder <n@stalder.io>"]
 edition = "2018"
+license = "MIT"
+readme = "README.md"
+categories = ["embedded", "no-std", "cryptography"]
+keywords = ["no-std", "nist", "cryptography", "signatures", "cortex-m"]
+repository = "https://github.com/ycrypto/p256-cortex-m4"
+
+[package.metadata.docs.rs]
+targets = ["thumbv7em-none-eabi"]
 
 [dependencies]
 der = { version = "0.2.9", features = ["big-uint", "derive"], optional = true }
