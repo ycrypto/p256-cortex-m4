@@ -28,7 +28,7 @@
 
 ## What is this?
 
-Low-level bindings to the ultra-fast [P256-Cortex-M4][p256-cortex-m4] ECDH and ECDSA implementation.
+Low-level bindings to the glorious and ultra-fast [P256-Cortex-M4][p256-cortex-m4] ECDH and ECDSA implementation.
 
 [p256-cortex-m4]: https://github.com/Emill/P256-Cortex-M4
 

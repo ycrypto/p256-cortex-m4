@@ -4,6 +4,9 @@ use std::path::PathBuf;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=P256-Cortex-M4/p256-cortex-m4.h");
+    println!("cargo:rerun-if-changed=P256-Cortex-M4/p256-cortex-m4.c");
+    println!("cargo:rerun-if-changed=p256-cortex-m4-range-checks.h");
 
     let target = env::var("TARGET")?;
 
@@ -27,6 +30,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let bindings = bindgen::Builder::default()
         .header("P256-Cortex-M4/p256-cortex-m4.h")
+        .header("p256-cortex-m4-range-checks.h")
         .clang_arg(format!("--target={}", target))
         .use_core()
         .ctypes_prefix("cty")
