@@ -334,7 +334,7 @@ impl Signature {
     ///
     /// Necessarily, bytes must be of length 64, and r and s must be integers
     /// in the range 1..=n-1, otherwise decoding fails.
-    pub fn try_from_bytes(bytes: &[u8]) -> Result<Self> {
+    pub fn from_untagged_bytes(bytes: &[u8]) -> Result<Self> {
         if bytes.len() != 64 {
             return Err(Error);
         }
@@ -370,25 +370,30 @@ impl Signature {
         }
     }
 
+    // /// Decode signature from ASN.1 DER
+    // #[cfg(feature = "sec1-signatures")]
+    // #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
+    // pub fn from_sec1_bytes(bytes: &[u8]) -> Result<Self> {
+    //     todo!();
+    // }
+
     /// Encode signature from big-endian r, then big-endian s, without framing.
-    pub fn to_bytes(&self) -> [u8; 64] {
+    pub fn to_untagged_bytes(&self) -> [u8; 64] {
         let mut bytes = [0u8; 64];
         bytes[..32].copy_from_slice(&self.r());
         bytes[32..].copy_from_slice(&self.s());
         bytes
     }
 
-    // /// Decode signature from ASN.1 DER
-    // pub fn from_asn1(bytes: &[u8]) -> Result<Self> {
-    //     todo!();
-    // }
-
-    /// Encode signature as ASN.1 DER
+    /// Encode signature as ASN.1 DER, returning length.
     ///
-    /// This means interpreting signature as a SEQUENCE of (unsigned) INTEGERs.
-    #[cfg(feature = "der-signatures")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "der-signatures")))]
-    pub fn to_der(&self, buffer: &mut [u8; 72]) -> usize {
+    /// This means interpreting signature as a SEQUENCE of (unsigned) INTEGERs, as defined
+    /// under the name of `ECDSA-Sig-Value` in [SEC 1][sec-1], section C.5.
+    ///
+    /// [sec-1]: http://www.secg.org/sec1-v2.pdf
+    #[cfg(feature = "sec1-signatures")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
+    pub fn to_sec1_bytes(&self, buffer: &mut [u8; 72]) -> usize {
         let r = self.r();
         let s = self.s();
         let signature  = DerSignature {
@@ -402,8 +407,8 @@ impl Signature {
     }
 }
 
-#[cfg(feature = "der-signatures")]
-#[cfg_attr(docsrs, doc(cfg(feature = "der-signatures")))]
+#[cfg(feature = "sec1-signatures")]
+#[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, der::Message)]
 struct DerSignature<'a> {
     pub r: der::BigUInt<'a, der::consts::U32>,

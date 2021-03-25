@@ -1,7 +1,7 @@
 [package]
 name = "p256-cortex-m4"
 description = "Idiomatic, misuse-resistent bindings to P256-Cortex-M4"
-version = "0.1.0-alpha.3"
+version = "0.1.0-alpha.4"
 authors = ["Nicolas Stalder <n@stalder.io>"]
 edition = "2018"
 license = "MIT"
@@ -32,6 +32,6 @@ optional = true
 
 [features]
 default = ["non-cortex-m4-fallback"]
-der-signatures = ["der"]
+sec1-signatures = ["der"]
 prehash = ["sha2"]
 non-cortex-m4-fallback = ["ecdsa", "elliptic-curve", "p256"]

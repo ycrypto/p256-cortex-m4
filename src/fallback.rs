@@ -197,26 +197,26 @@ impl Signature {
    ///
    /// Necessarily, bytes must be of length 64, and r and s must be integers
    /// in the range 1..=n-1, otherwise decoding fails.
-   pub fn try_from_bytes(bytes: &[u8]) -> Result<Self> {
+   pub fn from_untagged_bytes(bytes: &[u8]) -> Result<Self> {
        Ok(Signature(bytes.try_into()?))
    }
 
-   /// Encode signature from big-endian r, then big-endian s, without framing.
-   pub fn to_bytes(&self) -> [u8; 64] {
-       self.0.as_ref().try_into().unwrap()
-   }
-
-   /// Decode signature from ASN.1 DER
-   pub fn from_asn1(bytes: &[u8]) -> Result<Self> {
+   /// Decode signature from SEC1 ASN.1 DER
+   pub fn from_sec1_bytes(bytes: &[u8]) -> Result<Self> {
        Ok(Signature(p256::ecdsa::Signature::from_asn1(bytes)?))
    }
 
-   /// Encode signature as ASN.1 DER
+   /// Encode signature from big-endian r, then big-endian s, without framing.
+   pub fn to_untagged_bytes(&self) -> [u8; 64] {
+       self.0.as_ref().try_into().unwrap()
+   }
+
+   /// Encode signature as SEC1 ASN.1 DER
    ///
    /// This means interpreting signature as a SEQUENCE of (unsigned) INTEGERs.
-   #[cfg(feature = "der-signatures")]
-   #[cfg_attr(docsrs, doc(cfg(feature = "der-signatures")))]
-   pub fn to_der(&self, buffer: &mut [u8; 72]) -> usize {
+   #[cfg(feature = "sec1-signatures")]
+   #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
+   pub fn to_sec1_bytes(&self, buffer: &mut [u8; 72]) -> usize {
        let asn1_signature = self.0.to_asn1();
        buffer.copy_from_slice(asn1_signature.as_ref());
        asn1_signature.as_ref().len()
