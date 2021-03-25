@@ -419,6 +419,11 @@
 <span id="416">416</span>
 <span id="417">417</span>
 <span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">core</span>::{<span class="ident">convert</span>::<span class="ident">TryInto</span>, <span class="ident">mem</span>::<span class="ident">MaybeUninit</span>};
 
@@ -672,7 +677,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_compressed_sec1_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">33</span>] {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">MaybeUninit</span>::<span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">33</span>]<span class="op">&gt;</span>::<span class="ident">uninit</span>();
         <span class="kw">unsafe</span> {
-            <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_point_to_octet_string_uncompressed</span>(
+            <span class="ident">p256_cortex_m4_sys</span>::<span class="ident">p256_point_to_octet_string_compressed</span>(
                 <span class="ident">bytes</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>,
                 <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">x</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
                 <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">y</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>,
@@ -756,7 +761,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Necessarily, bytes must be of length 64, and r and s must be integers</span>
     <span class="doccomment">/// in the range 1..=n-1, otherwise decoding fails.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_from_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_untagged_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="number">64</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>);
         }
@@ -792,25 +797,30 @@
         }
     }
 
+    <span class="comment">// /// Decode signature from ASN.1 DER</span>
+    <span class="comment">// #[cfg(feature = &quot;sec1-signatures&quot;)]</span>
+    <span class="comment">// #[cfg_attr(docsrs, doc(cfg(feature = &quot;sec1-signatures&quot;)))]</span>
+    <span class="comment">// pub fn from_sec1_bytes(bytes: &amp;[u8]) -&gt; Result&lt;Self&gt; {</span>
+    <span class="comment">//     todo!();</span>
+    <span class="comment">// }</span>
+
     <span class="doccomment">/// Encode signature from big-endian r, then big-endian s, without framing.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">64</span>] {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_untagged_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">64</span>] {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> [<span class="number">0u8</span>; <span class="number">64</span>];
         <span class="ident">bytes</span>[..<span class="number">32</span>].<span class="ident">copy_from_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">r</span>());
         <span class="ident">bytes</span>[<span class="number">32</span>..].<span class="ident">copy_from_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">s</span>());
         <span class="ident">bytes</span>
     }
 
-    <span class="comment">// /// Decode signature from ASN.1 DER</span>
-    <span class="comment">// pub fn from_asn1(bytes: &amp;[u8]) -&gt; Result&lt;Self&gt; {</span>
-    <span class="comment">//     todo!();</span>
-    <span class="comment">// }</span>
-
-    <span class="doccomment">/// Encode signature as ASN.1 DER</span>
+    <span class="doccomment">/// Encode signature as ASN.1 DER, returning length.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This means interpreting signature as a SEQUENCE of (unsigned) INTEGERs.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;der-signatures&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;der-signatures&quot;</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_der</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>; <span class="number">72</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="doccomment">/// This means interpreting signature as a SEQUENCE of (unsigned) INTEGERs, as defined</span>
+    <span class="doccomment">/// under the name of `ECDSA-Sig-Value` in [SEC 1][sec-1], section C.5.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [sec-1]: http://www.secg.org/sec1-v2.pdf</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sec1-signatures&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sec1-signatures&quot;</span>)))]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_sec1_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>; <span class="number">72</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
         <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">r</span>();
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">s</span>();
         <span class="kw">let</span> <span class="ident">signature</span>  <span class="op">=</span> <span class="ident">DerSignature</span> {
@@ -824,8 +834,8 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;der-signatures&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;der-signatures&quot;</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sec1-signatures&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sec1-signatures&quot;</span>)))]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">der</span>::<span class="ident">Message</span>)]</span>
 <span class="kw">struct</span> <span class="ident">DerSignature</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="ident">r</span>: <span class="ident">der</span>::<span class="ident">BigUInt</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">der</span>::<span class="ident">consts</span>::<span class="ident">U32</span><span class="op">&gt;</span>,
@@ -839,4 +849,5 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "p256_cortex_m4";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="p256_cortex_m4"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
