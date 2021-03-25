@@ -250,7 +250,7 @@ impl PublicKey {
     pub fn to_compressed_sec1_bytes(&self) -> [u8; 33] {
         let mut bytes = MaybeUninit::<[u8; 33]>::uninit();
         unsafe {
-            p256_cortex_m4_sys::p256_point_to_octet_string_uncompressed(
+            p256_cortex_m4_sys::p256_point_to_octet_string_compressed(
                 bytes.as_mut_ptr() as *mut _,
                 &self.x[0] as *const _,
                 &self.y[0] as *const _,
