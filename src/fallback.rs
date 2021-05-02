@@ -203,7 +203,7 @@ impl Signature {
 
    /// Decode signature from SEC1 ASN.1 DER
    pub fn from_sec1_bytes(bytes: &[u8]) -> Result<Self> {
-       Ok(Signature(p256::ecdsa::Signature::from_asn1(bytes)?))
+       Ok(Signature(p256::ecdsa::Signature::from_der(bytes)?))
    }
 
    /// Encode signature from big-endian r, then big-endian s, without framing.
@@ -217,7 +217,7 @@ impl Signature {
    #[cfg(feature = "sec1-signatures")]
    #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
    pub fn to_sec1_bytes(&self, buffer: &mut [u8; 72]) -> usize {
-       let asn1_signature = self.0.to_asn1();
+       let asn1_signature = self.0.to_der();
        buffer.copy_from_slice(asn1_signature.as_ref());
        asn1_signature.as_ref().len()
    }
