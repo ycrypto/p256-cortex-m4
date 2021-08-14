@@ -1,5 +1,4 @@
 use std::env;
-use std::path::PathBuf;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("cargo:rerun-if-changed=build.rs");
@@ -24,23 +23,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         builder.compile("p256-cortex-m4-sys");
 
-        let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
+        #[cfg(feature = "bindgen")]
+        {
+            use std::path::PathBuf;
 
-        let bindings = bindgen::Builder::default()
-            .header("P256-Cortex-M4/p256-cortex-m4.h")
-            .header("p256-cortex-m4-range-checks.h")
-            .clang_arg(format!("--target={}", target))
-            .use_core()
-            .ctypes_prefix("cty")
-            .rustfmt_bindings(true)
-            .generate()
-            .expect("Unable to generate bindings");
+            let bindings = bindgen::Builder::default()
+                .header("P256-Cortex-M4/p256-cortex-m4.h")
+                .header("p256-cortex-m4-range-checks.h")
+                .clang_arg(format!("--target={}", target))
+                .use_core()
+                .ctypes_prefix("cty")
+                .rustfmt_bindings(true)
+                .generate()
+                .expect("Unable to generate bindings");
 
-        let out_file = out_dir.join("bindings.rs");
+            let out_file = out_dir.join("bindings.rs");
 
-        bindings
-            .write_to_file(out_file)
-            .expect("Couldn't write bindings!");
+            bindings
+                .write_to_file(out_file)
+                .expect("Couldn't write bindings!");
+        }
     }
 
     Ok(())
