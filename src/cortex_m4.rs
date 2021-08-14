@@ -398,9 +398,9 @@ impl Signature {
     pub fn to_sec1_bytes(&self, buffer: &mut [u8; 72]) -> usize {
         let r = self.r();
         let s = self.s();
-        let signature  = DerSignature {
-            r: der::BigUInt::new(&r).unwrap(),
-            s: der::BigUInt::new(&s).unwrap(),
+        let signature = DerSignature {
+            r: der::asn1::UIntBytes::new(&r).unwrap(),
+            s: der::asn1::UIntBytes::new(&s).unwrap(),
         };
 
         use der::Encodable;
@@ -413,8 +413,8 @@ impl Signature {
 #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, der::Message)]
 struct DerSignature<'a> {
-    pub r: der::BigUInt<'a, der::consts::U32>,
-    pub s: der::BigUInt<'a, der::consts::U32>,
+    pub r: der::asn1::UIntBytes<'a>,
+    pub s: der::asn1::UIntBytes<'a>,
 }
 
 impl SharedSecret {
