@@ -2,7 +2,6 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=P256-Cortex-M4/p256-cortex-m4.h");
     println!("cargo:rerun-if-changed=P256-Cortex-M4/p256-cortex-m4.c");
@@ -21,10 +20,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .flag("-std=c11")
             .file("P256-Cortex-M4/p256-cortex-m4.c")
             .file("P256-Cortex-M4/p256-cortex-m4-asm-gcc.S")
-            .flag("-march=armv7e-m")
-        ;
+            .flag("-march=armv7e-m");
 
-        builder.compile("micro-ecc-sys");
+        builder.compile("p256-cortex-m4-sys");
 
         let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
@@ -35,7 +33,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .use_core()
             .ctypes_prefix("cty")
             .rustfmt_bindings(true)
-
             .generate()
             .expect("Unable to generate bindings");
 
