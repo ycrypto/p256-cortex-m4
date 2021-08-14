@@ -283,6 +283,7 @@ impl PublicKey {
     }
 
     /// Verify signature on message assumed to be hashed, if needed.
+    #[must_use = "The return value indicates if the message is authentic"]
     pub fn verify_prehashed(&self, prehashed_message: &[u8], signature: &Signature) -> bool {
         unsafe { p256_cortex_m4_sys::p256_verify(
             &self.x[0] as *const u32,
@@ -297,6 +298,7 @@ impl PublicKey {
     /// Verify signature on message, which is hashed with SHA-256 first.
     #[cfg(feature = "prehash")]
     #[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
+    #[must_use = "The return value indicates if the message is authentic"]
     pub fn verify(&self, message: &[u8], signature: &Signature) -> bool {
         let prehashed_message = sha256(message);
         self.verify_prehashed(prehashed_message.as_ref(), signature)

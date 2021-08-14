@@ -166,6 +166,7 @@ impl PublicKey {
    }
 
    /// Verify signature on message assumed to be hashed, if needed.
+   #[must_use = "The return value indicates if the message is authentic"]
    pub fn verify_prehashed(&self, prehashed_message: &[u8], signature: &Signature) -> bool {
        let prehashed_message_as_scalar = p256::Scalar::from_bytes_reduced(prehashed_message.try_into().unwrap());
        self.0.as_affine().verify_prehashed(&prehashed_message_as_scalar, &signature.0).is_ok()
@@ -174,6 +175,7 @@ impl PublicKey {
    /// Verify signature on message, which is hashed with SHA-256 first.
    #[cfg(feature = "prehash")]
    #[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
+   #[must_use = "The return value indicates if the message is authentic"]
    pub fn verify(&self, message: &[u8], signature: &Signature) -> bool {
        let verifier: p256::ecdsa::VerifyingKey = self.0.clone().into();
        use p256::ecdsa::signature::Verifier;
