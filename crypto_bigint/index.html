@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Pure Rust implementation of a big integer library designed for cryptography."><meta name="keywords" content="rust, rustlang, rust-lang, crypto_bigint"><title>crypto_bigint - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings"></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../crypto_bigint/index.html'><div class='logo-container'><img src='https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg' alt='logo'></div></a><h2 class="location">Crate crypto_bigint</h2><div class="block version"><p>Version 0.2.3</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all crypto_bigint's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#constants">Constants</a></li><li><a href="#traits">Traits</a></li><li><a href="#types">Type Definitions</a></li></ul></div><div id="sidebar-vars" data-name="crypto_bigint" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img src="../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img src="../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">crypto_bigint</a><button id="copy-path" onclick="copy_path(this)" title="copy path"><img src="../clipboard.svg" width="19" height="18" alt="Copy item import" title="Copy item import to clipboard"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/crypto_bigint/lib.rs.html#1-75" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Pure Rust implementation of a big integer library designed for cryptography.</p>
+<h1 id="about" class="section-header"><a href="#about">About</a></h1>
+<p>This library has been designed  from the ground-up for use in cryptographic
+applications. It provides constant-time, <code>no_std</code>-friendly implementations
+of modern formulas implemented using const generics.</p>
+<h1 id="minimum-supported-rust-version" class="section-header"><a href="#minimum-supported-rust-version">Minimum Supported Rust Version</a></h1>
+<p><strong>Rust 1.51</strong> at a minimum.</p>
+<h1 id="goals" class="section-header"><a href="#goals">Goals</a></h1>
+<ul>
+<li>No heap allocations i.e. <code>no_std</code>-friendly.</li>
+<li>Constant-time by default using traits from the <a href="../subtle/index.html" title="subtle"><code>subtle</code></a> crate.</li>
+<li>Leverage what is possible today with const generics on <code>stable</code> rust.</li>
+<li>Support <code>const fn</code> as much as possible, including decoding big integers from
+bytes/hex and performing arithmetic operations on them, with the goal of
+being able to compute values at compile-time.</li>
+</ul>
+<h1 id="status" class="section-header"><a href="#status">Status</a></h1>
+<p>This library presently provides only a baseline level of functionality.
+It’s new, unaudited, and may contain bugs. We recommend that it only be
+used in an experimental capacity for now.</p>
+<p>Please see the <a href="https://github.com/RustCrypto/utils/issues/453">feature wishlist tracking ticket</a> for more information.</p>
+<h1 id="generic-array-interop" class="section-header"><a href="#generic-array-interop"><code>generic-array</code> interop</a></h1>
+<p>When the optional <code>generic-array</code> feature is enabled, this library provides
+an <a href="trait.ArrayEncoding.html" title="ArrayEncoding"><code>ArrayEncoding</code></a> trait which can be used to serialize/deserialize big
+integer values as <code>GenericArray&lt;u8, N&gt;</code>.</p>
+</div></details><h2 id="reexports" class="section-header"><a href="#reexports">Re-exports</a></h2>
+<table><tr class="import-item"><td><code>pub use <a class="mod" href="../subtle/index.html" title="mod subtle">subtle</a>;</code></td><td class="docblock-short"></td></tr><tr class="import-item"><td><code>pub use <a class="mod" href="../generic_array/index.html" title="mod generic_array">generic_array</a>;</code></td><td class="docblock-short"></td></tr></table><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<table><tr class="module-item"><td><a class="mod" href="consts/index.html" title="crypto_bigint::consts mod">consts</a></td><td class="docblock-short"><p>Type aliases for many constants.</p>
+</td></tr></table><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2>
+<table><tr class="module-item"><td><a class="macro" href="macro.nlimbs.html" title="crypto_bigint::nlimbs macro">nlimbs</a></td><td class="docblock-short"><p>Calculate the number of limbs required to represent the given number of bits.</p>
+</td></tr></table><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
+<table><tr class="module-item"><td><a class="struct" href="struct.Checked.html" title="crypto_bigint::Checked struct">Checked</a></td><td class="docblock-short"><p>Provides intentionally-checked arithmetic on <code>T</code>.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.Limb.html" title="crypto_bigint::Limb struct">Limb</a></td><td class="docblock-short"><p>Big integers are represented as an array of smaller CPU word-size integers
+called “limbs”.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.UInt.html" title="crypto_bigint::UInt struct">UInt</a></td><td class="docblock-short"><p>Big unsigned integer.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.Wrapping.html" title="crypto_bigint::Wrapping struct">Wrapping</a></td><td class="docblock-short"><p>Provides intentionally-wrapped arithmetic on <code>T</code>.</p>
+</td></tr></table><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.LIMB_BYTES.html" title="crypto_bigint::LIMB_BYTES constant">LIMB_BYTES</a></td><td class="docblock-short"><span class="stab deprecated" title="">Deprecated</span><p>Number of bytes in a <a href="struct.Limb.html" title="Limb"><code>Limb</code></a>.</p>
+</td></tr></table><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
+<table><tr class="module-item"><td><a class="trait" href="trait.AddMod.html" title="crypto_bigint::AddMod trait">AddMod</a></td><td class="docblock-short"><p>Compute <code>self + rhs mod p</code>.</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.ArrayEncoding.html" title="crypto_bigint::ArrayEncoding trait">ArrayEncoding</a></td><td class="docblock-short"><p>Support for encoding a big integer as a <code>GenericArray</code>.</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.Concat.html" title="crypto_bigint::Concat trait">Concat</a></td><td class="docblock-short"><p>Concatenate two numbers into a “wide” twice-width value, using the <code>rhs</code>
+value as the least significant value.</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.Encoding.html" title="crypto_bigint::Encoding trait">Encoding</a></td><td class="docblock-short"><p>Encoding support.</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.MulMod.html" title="crypto_bigint::MulMod trait">MulMod</a></td><td class="docblock-short"><p>Compute <code>self * rhs mod p</code>.</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.NegMod.html" title="crypto_bigint::NegMod trait">NegMod</a></td><td class="docblock-short"><p>Compute <code>-self mod p</code>.</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.Split.html" title="crypto_bigint::Split trait">Split</a></td><td class="docblock-short"><p>Split a number in half, returning the most significant half followed by
+the least significant.</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.SubMod.html" title="crypto_bigint::SubMod trait">SubMod</a></td><td class="docblock-short"><p>Compute <code>self - rhs mod p</code>.</p>
+</td></tr></table><h2 id="types" class="section-header"><a href="#types">Type Definitions</a></h2>
+<table><tr class="module-item"><td><a class="type" href="type.ByteArray.html" title="crypto_bigint::ByteArray type">ByteArray</a></td><td class="docblock-short"><p>Alias for a byte array whose size is defined by <a href="trait.ArrayEncoding.html#associatedtype.ByteSize" title="ArrayEncoding::ByteSize"><code>ArrayEncoding::ByteSize</code></a>.</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U64.html" title="crypto_bigint::U64 type">U64</a></td><td class="docblock-short"><p>64-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U128.html" title="crypto_bigint::U128 type">U128</a></td><td class="docblock-short"><p>128-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U192.html" title="crypto_bigint::U192 type">U192</a></td><td class="docblock-short"><p>192-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U256.html" title="crypto_bigint::U256 type">U256</a></td><td class="docblock-short"><p>256-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U384.html" title="crypto_bigint::U384 type">U384</a></td><td class="docblock-short"><p>384-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U448.html" title="crypto_bigint::U448 type">U448</a></td><td class="docblock-short"><p>448-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U512.html" title="crypto_bigint::U512 type">U512</a></td><td class="docblock-short"><p>512-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U768.html" title="crypto_bigint::U768 type">U768</a></td><td class="docblock-short"><p>768-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U896.html" title="crypto_bigint::U896 type">U896</a></td><td class="docblock-short"><p>896-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U1024.html" title="crypto_bigint::U1024 type">U1024</a></td><td class="docblock-short"><p>1024-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U1536.html" title="crypto_bigint::U1536 type">U1536</a></td><td class="docblock-short"><p>1536-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U1792.html" title="crypto_bigint::U1792 type">U1792</a></td><td class="docblock-short"><p>1792-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U2048.html" title="crypto_bigint::U2048 type">U2048</a></td><td class="docblock-short"><p>2048-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U3072.html" title="crypto_bigint::U3072 type">U3072</a></td><td class="docblock-short"><p>3072-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U3584.html" title="crypto_bigint::U3584 type">U3584</a></td><td class="docblock-short"><p>3584-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U4096.html" title="crypto_bigint::U4096 type">U4096</a></td><td class="docblock-short"><p>4096-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U6144.html" title="crypto_bigint::U6144 type">U6144</a></td><td class="docblock-short"><p>6144-bit
+unsigned big integer</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.U8192.html" title="crypto_bigint::U8192 type">U8192</a></td><td class="docblock-short"><p>8192-bit
+unsigned big integer</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="crypto_bigint" data-search-index-js="../search-index.js" data-search-js="../search.js"></div><script src="../main.js"></script></body></html>
