@@ -111,7 +111,7 @@ impl SecretKey {
     /// ECDH key agreement.
     pub fn agree(&self, other: &PublicKey) -> SharedSecret {
         SharedSecret(elliptic_curve::ecdh::diffie_hellman(
-            self.0.secret_scalar(),
+            self.0.to_secret_scalar(),
             other.0.as_affine(),
         ))
     }
