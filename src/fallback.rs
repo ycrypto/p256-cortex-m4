@@ -220,8 +220,9 @@ impl Signature {
    #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
    pub fn to_sec1_bytes(&self, buffer: &mut [u8; 72]) -> usize {
        let asn1_signature = self.0.to_der();
-       buffer.copy_from_slice(asn1_signature.as_ref());
-       asn1_signature.as_ref().len()
+       let n = asn1_signature.as_ref().len();
+       buffer[..n].copy_from_slice(asn1_signature.as_ref());
+       n
    }
 }
 
