@@ -1,7 +1,7 @@
 [package]
 name = "p256-cortex-m4"
 description = "Idiomatic, misuse-resistent bindings to P256-Cortex-M4"
-version = "0.1.0-alpha.5"
+version = "0.1.0-alpha.6"
 authors = ["Nicolas Stalder <n@stalder.io>"]
 edition = "2018"
 license = "MIT"
