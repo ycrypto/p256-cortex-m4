@@ -170,7 +170,7 @@ impl SecretKey {
     /// Internally, draws 256-bit `k` repeatedly, until signing succeeds.
     pub fn sign_prehashed(
         &self,
-        prehashed_message: &[u8],
+        prehashed_message: [u8; 32],
         rng: impl CryptoRng + RngCore,
     ) -> Signature {
         let mut signature = Signature {
@@ -199,8 +199,7 @@ impl SecretKey {
     #[cfg(feature = "prehash")]
     /// Non-deterministic signature on message, which is hashed with SHA-256 first.
     pub fn sign(&self, message: &[u8], rng: impl CryptoRng + RngCore) -> Signature {
-        let prehashed_message = sha256(message);
-        self.sign_prehashed(prehashed_message.as_ref(), rng)
+        self.sign_prehashed(sha256(message), rng)
     }
 
     /// ECDH key agreement.
@@ -302,7 +301,7 @@ impl PublicKey {
 
     /// Verify signature on message assumed to be hashed, if needed.
     #[must_use = "The return value indicates if the message is authentic"]
-    pub fn verify_prehashed(&self, prehashed_message: &[u8], signature: &Signature) -> bool {
+    pub fn verify_prehashed(&self, prehashed_message: [u8; 32], signature: &Signature) -> bool {
         unsafe {
             p256_cortex_m4_sys::p256_verify(
                 &self.x[0] as *const u32,
@@ -319,8 +318,7 @@ impl PublicKey {
     #[cfg(feature = "prehash")]
     #[must_use = "The return value indicates if the message is authentic"]
     pub fn verify(&self, message: &[u8], signature: &Signature) -> bool {
-        let prehashed_message = sha256(message);
-        self.verify_prehashed(prehashed_message.as_ref(), signature)
+        self.verify_prehashed(sha256(message), signature)
     }
 }
 
@@ -418,21 +416,21 @@ impl Signature {
         let r = self.r();
         let s = self.s();
         let signature = DerSignature {
-            r: der::asn1::UIntBytes::new(&r).unwrap(),
-            s: der::asn1::UIntBytes::new(&s).unwrap(),
+            r: der::asn1::UIntRef::new(&r).unwrap(),
+            s: der::asn1::UIntRef::new(&s).unwrap(),
         };
 
-        use der::Encodable;
+        use der::Encode;
         let l = signature.encode_to_slice(buffer.as_mut()).unwrap().len();
         l
     }
 }
 
 #[cfg(feature = "sec1-signatures")]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, der::Message)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, der::Sequence)]
 struct DerSignature<'a> {
-    pub r: der::asn1::UIntBytes<'a>,
-    pub s: der::asn1::UIntBytes<'a>,
+    pub r: der::asn1::UIntRef<'a>,
+    pub s: der::asn1::UIntRef<'a>,
 }
 
 impl SharedSecret {
