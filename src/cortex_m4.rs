@@ -1,4 +1,4 @@
-use core::{convert::TryInto, mem::MaybeUninit};
+use core::mem::MaybeUninit;
 
 use rand_core::{CryptoRng, RngCore};
 use zeroize::{Zeroize, Zeroizing};

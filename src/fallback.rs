@@ -1,5 +1,3 @@
-use core::convert::TryInto;
-
 use ecdsa::hazmat::{SignPrimitive, VerifyPrimitive};
 use elliptic_curve::sec1::ToEncodedPoint;
 use rand_core::{CryptoRng, RngCore};
