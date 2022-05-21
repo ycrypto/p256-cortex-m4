@@ -99,7 +99,6 @@ impl SecretKey {
     }
 
     #[cfg(feature = "prehash")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
     /// Deterministic signature on message, which is hashed with SHA-256 first.
     pub fn sign(&self, message: &[u8], _rng: impl CryptoRng + RngCore) -> Signature {
         let signer: p256::ecdsa::SigningKey = self.0.clone().into();
@@ -174,7 +173,6 @@ impl PublicKey {
 
    /// Verify signature on message, which is hashed with SHA-256 first.
    #[cfg(feature = "prehash")]
-   #[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
    #[must_use = "The return value indicates if the message is authentic"]
    pub fn verify(&self, message: &[u8], signature: &Signature) -> bool {
        let verifier: p256::ecdsa::VerifyingKey = self.0.clone().into();
@@ -217,7 +215,6 @@ impl Signature {
    ///
    /// This means interpreting signature as a SEQUENCE of (unsigned) INTEGERs.
    #[cfg(feature = "sec1-signatures")]
-   #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
    pub fn to_sec1_bytes(&self, buffer: &mut [u8; 72]) -> usize {
        let asn1_signature = self.0.to_der();
        let n = asn1_signature.as_ref().len();

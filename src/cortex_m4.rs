@@ -182,7 +182,6 @@ impl SecretKey {
     }
 
     #[cfg(feature = "prehash")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
     /// Non-deterministic signature on message, which is hashed with SHA-256 first.
     pub fn sign(&self, message: &[u8], rng: impl CryptoRng + RngCore) -> Signature {
         let prehashed_message = sha256(message);
@@ -297,7 +296,6 @@ impl PublicKey {
 
     /// Verify signature on message, which is hashed with SHA-256 first.
     #[cfg(feature = "prehash")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
     #[must_use = "The return value indicates if the message is authentic"]
     pub fn verify(&self, message: &[u8], signature: &Signature) -> bool {
         let prehashed_message = sha256(message);
@@ -374,7 +372,6 @@ impl Signature {
 
     // /// Decode signature from ASN.1 DER
     // #[cfg(feature = "sec1-signatures")]
-    // #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
     // pub fn from_sec1_bytes(bytes: &[u8]) -> Result<Self> {
     //     todo!();
     // }
@@ -394,7 +391,6 @@ impl Signature {
     ///
     /// [sec-1]: http://www.secg.org/sec1-v2.pdf
     #[cfg(feature = "sec1-signatures")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
     pub fn to_sec1_bytes(&self, buffer: &mut [u8; 72]) -> usize {
         let r = self.r();
         let s = self.s();
@@ -410,7 +406,6 @@ impl Signature {
 }
 
 #[cfg(feature = "sec1-signatures")]
-#[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, der::Message)]
 struct DerSignature<'a> {
     pub r: der::asn1::UIntBytes<'a>,
