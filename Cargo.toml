@@ -30,6 +30,9 @@ default-features = false
 features = ["arithmetic", "ecdh", "ecdsa", "sha256", "zeroize"]
 optional = true
 
+[dev-dependencies]
+rand_core = { version = "0.6", features = ["getrandom"] }
+
 [features]
 default = ["non-cortex-m4-fallback"]
 sec1-signatures = ["der"]
