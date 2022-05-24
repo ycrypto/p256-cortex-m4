@@ -37,6 +37,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .generate()
                 .expect("Unable to generate bindings");
 
+            let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
             let out_file = out_dir.join("bindings.rs");
 
             bindings
