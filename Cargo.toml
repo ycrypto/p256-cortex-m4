@@ -1,7 +1,7 @@
 [package]
 name = "p256-cortex-m4-sys"
 description = "Low-level bindings to P256-Cortex-M4"
-version = "0.1.0-alpha.2"
+version = "0.1.0",
 authors = ["Emill", "Nicolas Stalder <n@stalder.io>"]
 edition = "2018"
 license = "MIT"
