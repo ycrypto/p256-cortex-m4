@@ -40,3 +40,6 @@ pub use cortex_m4::*;
 mod fallback;
 #[cfg(all(feature = "non-cortex-m4-fallback", not(cortex_m4)))]
 pub use fallback::*;
+
+#[cfg(feature = "signature")]
+pub mod signature;
