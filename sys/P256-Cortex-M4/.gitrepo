@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/Emill/P256-Cortex-M4
+	branch = master
+	commit = ecd3ec2222fc9e18b6b44c86bb7183971a2041fc
+	parent = 483ea21ff29399bbd6dc053898e6a0791dcd9e6f
+	method = merge
+	cmdver = 0.4.3
