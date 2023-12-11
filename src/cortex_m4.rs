@@ -3,9 +3,9 @@ use core::{convert::TryInto, mem::MaybeUninit};
 use rand_core::{CryptoRng, RngCore};
 use zeroize::{Zeroize, Zeroizing};
 
-use crate::{Error, Result};
 #[cfg(feature = "prehash")]
 use crate::sha256;
+use crate::{Error, Result};
 
 /// NIST P-256 secret key.
 ///
@@ -61,12 +61,16 @@ impl Keypair {
 
         let mut rng = rng;
         loop {
-            rng.fill_bytes(unsafe { core::mem::transmute::<&mut [u32; 8], &mut [u8; 32]>(&mut keypair.secret.0) });
-            let valid = unsafe { p256_cortex_m4_sys::p256_keygen(
-                &mut keypair.public.x[0] as *mut _,
-                &mut keypair.public.y[0] as _,
-                &keypair.secret.0[0] as _,
-            ) };
+            rng.fill_bytes(unsafe {
+                core::mem::transmute::<&mut [u32; 8], &mut [u8; 32]>(&mut keypair.secret.0)
+            });
+            let valid = unsafe {
+                p256_cortex_m4_sys::p256_keygen(
+                    &mut keypair.public.x[0] as *mut _,
+                    &mut keypair.public.y[0] as _,
+                    &keypair.secret.0[0] as _,
+                )
+            };
             if valid {
                 return keypair;
             }
@@ -82,12 +86,13 @@ impl SecretKey {
         let mut secret = SecretKey([0u32; 8]);
         let mut rng = rng;
         loop {
-            rng.fill_bytes(unsafe { core::mem::transmute::<&mut [u32; 8], &mut [u8; 32]>(&mut secret.0) });
-            let valid = unsafe { p256_cortex_m4_sys::P256_check_range_n(
-                &secret.0[0] as *const u32,
-            ) };
+            rng.fill_bytes(unsafe {
+                core::mem::transmute::<&mut [u32; 8], &mut [u8; 32]>(&mut secret.0)
+            });
+            let valid =
+                unsafe { p256_cortex_m4_sys::P256_check_range_n(&secret.0[0] as *const u32) };
             if valid {
-                return secret
+                return secret;
             }
         }
     }
@@ -100,15 +105,15 @@ impl SecretKey {
         }
 
         let mut secret = SecretKey([0u32; 8]);
-        unsafe { p256_cortex_m4_sys::p256_convert_endianness(
-            &mut secret.0[0] as *mut u32 as *mut _,
-            &bytes[0] as *const u8 as *const _,
-            32,
-        ) };
+        unsafe {
+            p256_cortex_m4_sys::p256_convert_endianness(
+                &mut secret.0[0] as *mut u32 as *mut _,
+                &bytes[0] as *const u8 as *const _,
+                32,
+            )
+        };
 
-        if !unsafe { p256_cortex_m4_sys::P256_check_range_n(
-            &secret.0[0] as *const u32,
-        ) } {
+        if !unsafe { p256_cortex_m4_sys::P256_check_range_n(&secret.0[0] as *const u32) } {
             return Err(Error);
         }
         Ok(secret)
@@ -133,11 +138,13 @@ impl SecretKey {
     /// "unsafe" because the caller is responsible for keeping the value secret.
     pub unsafe fn to_bytes(&self) -> [u8; 32] {
         let mut big_endian = [0u8; 32];
-        unsafe { p256_cortex_m4_sys::p256_convert_endianness(
-            &mut big_endian[0] as *mut u8 as *mut _,
-            &self.0[0] as *const u32 as *const _,
-            32,
-        ) };
+        unsafe {
+            p256_cortex_m4_sys::p256_convert_endianness(
+                &mut big_endian[0] as *mut u8 as *mut _,
+                &self.0[0] as *const u32 as *const _,
+                32,
+            )
+        };
         big_endian
     }
 
@@ -148,18 +155,24 @@ impl SecretKey {
             y: [0u32; 8],
         };
         // NB: We already know we are a valid secret key
-        unsafe { p256_cortex_m4_sys::p256_keygen(
-            &mut public.x[0] as *mut _,
-            &mut public.y[0] as _,
-            &self.0[0] as _,
-        ) };
+        unsafe {
+            p256_cortex_m4_sys::p256_keygen(
+                &mut public.x[0] as *mut _,
+                &mut public.y[0] as _,
+                &self.0[0] as _,
+            )
+        };
         public
     }
 
     /// Non-deterministic signature on message assumed to be hashed, if needed.
     ///
     /// Internally, draws 256-bit `k` repeatedly, until signing succeeds.
-    pub fn sign_prehashed(&self, prehashed_message: &[u8], rng: impl CryptoRng + RngCore) -> Signature {
+    pub fn sign_prehashed(
+        &self,
+        prehashed_message: &[u8],
+        rng: impl CryptoRng + RngCore,
+    ) -> Signature {
         let mut signature = Signature {
             r: [0u32; 8],
             s: [0u32; 8],
@@ -168,14 +181,16 @@ impl SecretKey {
         let mut rng = rng;
         loop {
             rng.fill_bytes(unsafe { core::mem::transmute::<&mut [u32; 8], &mut [u8; 32]>(&mut k) });
-            if unsafe { p256_cortex_m4_sys::p256_sign(
-                &mut signature.r[0] as *mut u32,
-                &mut signature.s[0] as *mut u32,
-                &prehashed_message[0] as *const u8,
-                prehashed_message.len() as u32,
-                &self.0 as *const u32,
-                &k[0] as *const u32,
-            ) } {
+            if unsafe {
+                p256_cortex_m4_sys::p256_sign(
+                    &mut signature.r[0] as *mut u32,
+                    &mut signature.s[0] as *mut u32,
+                    &prehashed_message[0] as *const u8,
+                    prehashed_message.len() as u32,
+                    &self.0 as *const u32,
+                    &k[0] as *const u32,
+                )
+            } {
                 return signature;
             }
         }
@@ -194,12 +209,14 @@ impl SecretKey {
         let mut shared = SharedSecret([0u8; 32]);
         // NB: By construction, `other` is a valid public key, so we do not need
         // to check the return value.
-        unsafe { p256_cortex_m4_sys::p256_ecdh_calc_shared_secret(
-            &mut shared.0[0] as *mut _,
-            &self.0[0] as *const _,
-            &other.x[0] as *const _,
-            &other.y[0] as *const _,
-        ) };
+        unsafe {
+            p256_cortex_m4_sys::p256_ecdh_calc_shared_secret(
+                &mut shared.0[0] as *mut _,
+                &self.0[0] as *const _,
+                &other.x[0] as *const _,
+                &other.y[0] as *const _,
+            )
+        };
         shared
     }
 }
@@ -229,15 +246,17 @@ impl PublicKey {
             x: [0u32; 8],
             y: [0u32; 8],
         };
-        if unsafe { p256_cortex_m4_sys::p256_octet_string_to_point(
-            &mut public.x[0] as *mut _,
-            &mut public.y[0] as *mut _,
-            &bytes[0] as *const _,
-            bytes.len() as u32,
-        ) } {
-            return Ok(public)
+        if unsafe {
+            p256_cortex_m4_sys::p256_octet_string_to_point(
+                &mut public.x[0] as *mut _,
+                &mut public.y[0] as *mut _,
+                &bytes[0] as *const _,
+                bytes.len() as u32,
+            )
+        } {
+            return Ok(public);
         } else {
-            return Err(Error)
+            return Err(Error);
         }
     }
 
@@ -285,14 +304,16 @@ impl PublicKey {
     /// Verify signature on message assumed to be hashed, if needed.
     #[must_use = "The return value indicates if the message is authentic"]
     pub fn verify_prehashed(&self, prehashed_message: &[u8], signature: &Signature) -> bool {
-        unsafe { p256_cortex_m4_sys::p256_verify(
-            &self.x[0] as *const u32,
-            &self.y[0] as *const u32,
-            &prehashed_message[0] as *const u8,
-            prehashed_message.len() as u32,
-            &signature.r[0] as *const u32,
-            &signature.s[0] as *const u32,
-        ) }
+        unsafe {
+            p256_cortex_m4_sys::p256_verify(
+                &self.x[0] as *const u32,
+                &self.y[0] as *const u32,
+                &prehashed_message[0] as *const u8,
+                prehashed_message.len() as u32,
+                &signature.r[0] as *const u32,
+                &signature.s[0] as *const u32,
+            )
+        }
     }
 
     /// Verify signature on message, which is hashed with SHA-256 first.
@@ -347,23 +368,25 @@ impl Signature {
             s: [0u32; 8],
         };
 
-        unsafe { p256_cortex_m4_sys::p256_convert_endianness(
-            &mut signature.r[0] as *mut u32 as *mut _,
-            &bytes[0] as *const u8 as *const _,
-            32,
-        ) };
-        let valid_r = unsafe { p256_cortex_m4_sys::P256_check_range_n(
-            &signature.r[0] as *const u32,
-        ) };
+        unsafe {
+            p256_cortex_m4_sys::p256_convert_endianness(
+                &mut signature.r[0] as *mut u32 as *mut _,
+                &bytes[0] as *const u8 as *const _,
+                32,
+            )
+        };
+        let valid_r =
+            unsafe { p256_cortex_m4_sys::P256_check_range_n(&signature.r[0] as *const u32) };
 
-        unsafe { p256_cortex_m4_sys::p256_convert_endianness(
-            &mut signature.s[0] as *mut u32 as *mut _,
-            &bytes[32] as *const u8 as *const _,
-            32,
-        ) };
-        let valid_s = unsafe { p256_cortex_m4_sys::P256_check_range_n(
-            &signature.r[0] as *const u32,
-        ) };
+        unsafe {
+            p256_cortex_m4_sys::p256_convert_endianness(
+                &mut signature.s[0] as *mut u32 as *mut _,
+                &bytes[32] as *const u8 as *const _,
+                32,
+            )
+        };
+        let valid_s =
+            unsafe { p256_cortex_m4_sys::P256_check_range_n(&signature.r[0] as *const u32) };
 
         if valid_r && valid_s {
             Ok(signature)
