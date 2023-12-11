@@ -16,7 +16,7 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
-der = { version = "0.4", features = ["bigint", "derive"], optional = true }
+der = { version = "0.7.8", features = ["derive"], optional = true }
 ecdsa = { version = "0.16.9", default-features = false, optional = true }
 elliptic-curve = { version = "0.13", default-features = false, optional = true }
 p256-cortex-m4-sys = "0.1.0-alpha.2"

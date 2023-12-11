@@ -422,11 +422,11 @@ impl Signature {
         let r = self.r();
         let s = self.s();
         let signature = DerSignature {
-            r: der::asn1::UIntBytes::new(&r).unwrap(),
-            s: der::asn1::UIntBytes::new(&s).unwrap(),
+            r: der::asn1::UintRef::new(&r).unwrap(),
+            s: der::asn1::UintRef::new(&s).unwrap(),
         };
 
-        use der::Encodable;
+        use der::Encode;
         let l = signature.encode_to_slice(buffer.as_mut()).unwrap().len();
         l
     }
@@ -434,10 +434,10 @@ impl Signature {
 
 #[cfg(feature = "sec1-signatures")]
 #[cfg_attr(docsrs, doc(cfg(feature = "sec1-signatures")))]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, der::Message)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, der::Sequence)]
 struct DerSignature<'a> {
-    pub r: der::asn1::UIntBytes<'a>,
-    pub s: der::asn1::UIntBytes<'a>,
+    pub r: der::asn1::UintRef<'a>,
+    pub s: der::asn1::UintRef<'a>,
 }
 
 impl SharedSecret {
