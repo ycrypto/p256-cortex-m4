@@ -9,7 +9,7 @@
 //! [p256]: https://docs.rs/p256/
 
 #![no_std]
-#![cfg_attr(docsrs, feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg), feature(doc_auto_cfg))]
 #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
 
 /// Errors.
@@ -23,7 +23,6 @@ pub type Result<T> = core::result::Result<T, Error>;
 
 /// Convenience function, calculates SHA256 hash digest of a slice of bytes.
 #[cfg(feature = "prehash")]
-#[cfg_attr(docsrs, doc(cfg(feature = "prehash")))]
 pub fn sha256(message: &[u8]) -> [u8; 32] {
     use sha2::digest::Digest;
     let mut hash = sha2::Sha256::new();
@@ -41,3 +40,6 @@ pub use cortex_m4::*;
 mod fallback;
 #[cfg(all(feature = "non-cortex-m4-fallback", not(cortex_m4)))]
 pub use fallback::*;
+
+#[cfg(feature = "signature")]
+pub mod signature;
