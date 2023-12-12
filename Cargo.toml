@@ -35,3 +35,8 @@ default = ["non-cortex-m4-fallback"]
 sec1-signatures = ["der"]
 prehash = ["sha2"]
 non-cortex-m4-fallback = ["ecdsa", "elliptic-curve", "p256"]
+
+[dev-dependencies]
+hex-literal = "0.4.1"
+rand = "0.8.5"
+p256 = { version = "0.13", features = ["std"] }
