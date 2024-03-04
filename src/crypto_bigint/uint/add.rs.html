@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crypto-bigint-0.2.11/src/uint/add.rs`."><title>add.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="crypto_bigint" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../crypto_bigint/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crypto-bigint-0.5.5/src/uint/add.rs`."><title>add.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="crypto_bigint" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../crypto_bigint/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="crypto_bigint"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -119,14 +120,98 @@
 <a href="#119" id="119">119</a>
 <a href="#120" id="120">120</a>
 <a href="#121" id="121">121</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! [`UInt`] addition operations.
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! [`Uint`] addition operations.
 
-</span><span class="kw">use </span><span class="kw">super</span>::UInt;
-<span class="kw">use crate</span>::{Limb, Wrapping};
+</span><span class="kw">use crate</span>::{Checked, CheckedAdd, CtChoice, Limb, Uint, Wrapping, Zero};
 <span class="kw">use </span>core::ops::{Add, AddAssign};
 <span class="kw">use </span>subtle::CtOption;
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; UInt&lt;LIMBS&gt; {
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Uint&lt;LIMBS&gt; {
     <span class="doccomment">/// Computes `a + b + carry`, returning the result along with the new carry.
     </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub const fn </span>adc(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>, <span class="kw-2">mut </span>carry: Limb) -&gt; (<span class="self">Self</span>, Limb) {
@@ -143,58 +228,134 @@
         (<span class="self">Self </span>{ limbs }, carry)
     }
 
+    <span class="doccomment">/// Perform saturating addition, returning `MAX` on overflow.
+    </span><span class="kw">pub const fn </span>saturating_add(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>(res, overflow) = <span class="self">self</span>.adc(rhs, Limb::ZERO);
+        <span class="self">Self</span>::ct_select(<span class="kw-2">&amp;</span>res, <span class="kw-2">&amp;</span><span class="self">Self</span>::MAX, CtChoice::from_lsb(overflow.<span class="number">0</span>))
+    }
+
     <span class="doccomment">/// Perform wrapping addition, discarding overflow.
     </span><span class="kw">pub const fn </span>wrapping_add(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.adc(rhs, Limb::ZERO).<span class="number">0
     </span>}
 
-    <span class="doccomment">/// Perform checked addition, returning a [`CtOption`] which `is_some` only
-    /// if the operation did not overflow.
-    </span><span class="kw">pub fn </span>checked_add(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
+    <span class="doccomment">/// Perform wrapping addition, returning the truthy value as the second element of the tuple
+    /// if an overflow has occurred.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>conditional_wrapping_add(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>,
+        choice: CtChoice,
+    ) -&gt; (<span class="self">Self</span>, CtChoice) {
+        <span class="kw">let </span>actual_rhs = Uint::ct_select(<span class="kw-2">&amp;</span>Uint::ZERO, rhs, choice);
+        <span class="kw">let </span>(sum, carry) = <span class="self">self</span>.adc(<span class="kw-2">&amp;</span>actual_rhs, Limb::ZERO);
+        (sum, CtChoice::from_lsb(carry.<span class="number">0</span>))
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; CheckedAdd&lt;<span class="kw-2">&amp;</span>Uint&lt;LIMBS&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = <span class="self">Self</span>;
+
+    <span class="kw">fn </span>checked_add(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
         <span class="kw">let </span>(result, carry) = <span class="self">self</span>.adc(rhs, Limb::ZERO);
         CtOption::new(result, carry.is_zero())
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
     <span class="kw">type </span>Output = <span class="self">Self</span>;
 
-    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: <span class="self">Self</span>) -&gt; Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: <span class="self">Self</span>) -&gt; Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
         Wrapping(<span class="self">self</span>.<span class="number">0</span>.wrapping_add(<span class="kw-2">&amp;</span>rhs.<span class="number">0</span>))
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add&lt;<span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add&lt;<span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
 
-    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
         Wrapping(<span class="self">self</span>.<span class="number">0</span>.wrapping_add(<span class="kw-2">&amp;</span>rhs.<span class="number">0</span>))
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add&lt;Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add&lt;Wrapping&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
 
-    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: Wrapping&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
         Wrapping(<span class="self">self</span>.<span class="number">0</span>.wrapping_add(<span class="kw-2">&amp;</span>rhs.<span class="number">0</span>))
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add&lt;<span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add&lt;<span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
 
-    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
         Wrapping(<span class="self">self</span>.<span class="number">0</span>.wrapping_add(<span class="kw-2">&amp;</span>rhs.<span class="number">0</span>))
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; AddAssign <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; AddAssign <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
     <span class="kw">fn </span>add_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="self">Self</span>) {
         <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>+ other;
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; AddAssign&lt;<span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; AddAssign&lt;<span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>add_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) {
+        <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>+ other;
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add <span class="kw">for </span>Checked&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = <span class="self">Self</span>;
+
+    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: <span class="self">Self</span>) -&gt; Checked&lt;Uint&lt;LIMBS&gt;&gt; {
+        Checked(
+            <span class="self">self</span>.<span class="number">0
+                </span>.and_then(|lhs| rhs.<span class="number">0</span>.and_then(|rhs| lhs.checked_add(<span class="kw-2">&amp;</span>rhs))),
+        )
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add&lt;<span class="kw-2">&amp;</span>Checked&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Checked&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Checked&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Checked&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; Checked&lt;Uint&lt;LIMBS&gt;&gt; {
+        Checked(
+            <span class="self">self</span>.<span class="number">0
+                </span>.and_then(|lhs| rhs.<span class="number">0</span>.and_then(|rhs| lhs.checked_add(<span class="kw-2">&amp;</span>rhs))),
+        )
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add&lt;Checked&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Checked&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Checked&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: Checked&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; Checked&lt;Uint&lt;LIMBS&gt;&gt; {
+        Checked(
+            <span class="self">self</span>.<span class="number">0
+                </span>.and_then(|lhs| rhs.<span class="number">0</span>.and_then(|rhs| lhs.checked_add(<span class="kw-2">&amp;</span>rhs))),
+        )
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Add&lt;<span class="kw-2">&amp;</span>Checked&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Checked&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Checked&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Checked&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; Checked&lt;Uint&lt;LIMBS&gt;&gt; {
+        Checked(
+            <span class="self">self</span>.<span class="number">0
+                </span>.and_then(|lhs| rhs.<span class="number">0</span>.and_then(|rhs| lhs.checked_add(<span class="kw-2">&amp;</span>rhs))),
+        )
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; AddAssign <span class="kw">for </span>Checked&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>add_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="self">Self</span>) {
+        <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>+ other;
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; AddAssign&lt;<span class="kw-2">&amp;</span>Checked&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Checked&lt;Uint&lt;LIMBS&gt;&gt; {
     <span class="kw">fn </span>add_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) {
         <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>+ other;
     }
@@ -202,7 +363,7 @@
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
-    <span class="kw">use crate</span>::{Limb, U128};
+    <span class="kw">use crate</span>::{CheckedAdd, Limb, U128};
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>adc_no_carry() {
@@ -216,6 +377,16 @@
         <span class="kw">let </span>(res, carry) = U128::MAX.adc(<span class="kw-2">&amp;</span>U128::ONE, Limb::ZERO);
         <span class="macro">assert_eq!</span>(res, U128::ZERO);
         <span class="macro">assert_eq!</span>(carry, Limb::ONE);
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>saturating_add_no_carry() {
+        <span class="macro">assert_eq!</span>(U128::ZERO.saturating_add(<span class="kw-2">&amp;</span>U128::ONE), U128::ONE);
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>saturating_add_with_carry() {
+        <span class="macro">assert_eq!</span>(U128::MAX.saturating_add(<span class="kw-2">&amp;</span>U128::ONE), U128::MAX);
     }
 
     <span class="attr">#[test]

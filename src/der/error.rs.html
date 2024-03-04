@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/der-0.4.5/src/error.rs`."><title>error.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="der" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../der/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/der-0.7.8/src/error.rs`."><title>error.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="der" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../der/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="der"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -257,15 +258,128 @@
 <a href="#257" id="257">257</a>
 <a href="#258" id="258">258</a>
 <a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Error types.
 
 </span><span class="kw">pub use </span>core::str::Utf8Error;
 
 <span class="kw">use crate</span>::{Length, Tag};
-<span class="kw">use </span>core::{convert::Infallible, fmt};
+<span class="kw">use </span>core::{convert::Infallible, fmt, num::TryFromIntError};
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;oid&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"oid"</span>)]
 </span><span class="kw">use </span><span class="kw">crate</span>::asn1::ObjectIdentifier;
+
+<span class="attr">#[cfg(feature = <span class="string">"pem"</span>)]
+</span><span class="kw">use </span><span class="kw">crate</span>::pem;
 
 <span class="doccomment">/// Result type.
 </span><span class="kw">pub type </span><span class="prelude-ty">Result</span>&lt;T&gt; = core::result::Result&lt;T, Error&gt;;
@@ -289,6 +403,20 @@
         }
     }
 
+    <span class="doccomment">/// Create a new [`ErrorKind::Incomplete`] for the given length.
+    ///
+    /// Computes the expected len as being one greater than `actual_len`.
+    </span><span class="kw">pub fn </span>incomplete(actual_len: Length) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>actual_len + Length::ONE {
+            <span class="prelude-val">Ok</span>(expected_len) =&gt; ErrorKind::Incomplete {
+                expected_len,
+                actual_len,
+            }
+            .at(actual_len),
+            <span class="prelude-val">Err</span>(err) =&gt; err.kind().at(actual_len),
+        }
+    }
+
     <span class="doccomment">/// Get the [`ErrorKind`] which occurred.
     </span><span class="kw">pub fn </span>kind(<span class="self">self</span>) -&gt; ErrorKind {
         <span class="self">self</span>.kind
@@ -301,7 +429,7 @@
 
     <span class="doccomment">/// For errors occurring inside of a nested message, extend the position
     /// count by the location where the nested message occurs.
-    </span><span class="kw">pub fn </span>nested(<span class="self">self</span>, nested_position: Length) -&gt; <span class="self">Self </span>{
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>nested(<span class="self">self</span>, nested_position: Length) -&gt; <span class="self">Self </span>{
         <span class="comment">// TODO(tarcieri): better handle length overflows occurring in this calculation?
         </span><span class="kw">let </span>position = (nested_position + <span class="self">self</span>.position.unwrap_or_default()).ok();
 
@@ -312,12 +440,15 @@
     }
 }
 
+<span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
+</span><span class="kw">impl </span>std::error::Error <span class="kw">for </span>Error {}
+
 <span class="kw">impl </span>fmt::Display <span class="kw">for </span>Error {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
-        <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.kind)<span class="question-mark">?</span>;
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="string">"{}"</span>, <span class="self">self</span>.kind)<span class="question-mark">?</span>;
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(pos) = <span class="self">self</span>.position {
-            <span class="macro">write!</span>(f, <span class="string">&quot; at DER byte {}&quot;</span>, pos)<span class="question-mark">?</span>;
+            <span class="macro">write!</span>(f, <span class="string">" at DER byte {}"</span>, pos)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
@@ -339,6 +470,15 @@
     }
 }
 
+<span class="kw">impl </span>From&lt;TryFromIntError&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(<span class="kw">_</span>: TryFromIntError) -&gt; Error {
+        Error {
+            kind: ErrorKind::Overflow,
+            position: <span class="prelude-val">None</span>,
+        }
+    }
+}
+
 <span class="kw">impl </span>From&lt;Utf8Error&gt; <span class="kw">for </span>Error {
     <span class="kw">fn </span>from(err: Utf8Error) -&gt; Error {
         Error {
@@ -348,25 +488,52 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;oid&quot;</span>)]
-</span><span class="kw">impl </span>From&lt;const_oid::Error&gt; <span class="kw">for </span>Error {
-    <span class="kw">fn </span>from(<span class="kw">_</span>: const_oid::Error) -&gt; Error {
-        ErrorKind::MalformedOid.into()
+<span class="attr">#[cfg(feature = <span class="string">"alloc"</span>)]
+</span><span class="kw">impl </span>From&lt;alloc::string::FromUtf8Error&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(err: alloc::string::FromUtf8Error) -&gt; Error {
+        ErrorKind::Utf8(err.utf8_error()).into()
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
-</span><span class="kw">impl </span>std::error::Error <span class="kw">for </span>ErrorKind {}
+<span class="attr">#[cfg(feature = <span class="string">"oid"</span>)]
+</span><span class="kw">impl </span>From&lt;const_oid::Error&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(<span class="kw">_</span>: const_oid::Error) -&gt; Error {
+        ErrorKind::OidMalformed.into()
+    }
+}
+
+<span class="attr">#[cfg(feature = <span class="string">"pem"</span>)]
+</span><span class="kw">impl </span>From&lt;pem::Error&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(err: pem::Error) -&gt; Error {
+        ErrorKind::Pem(err).into()
+    }
+}
+
+<span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
+</span><span class="kw">impl </span>From&lt;std::io::Error&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(err: std::io::Error) -&gt; Error {
+        <span class="kw">match </span>err.kind() {
+            std::io::ErrorKind::NotFound =&gt; ErrorKind::FileNotFound,
+            std::io::ErrorKind::PermissionDenied =&gt; ErrorKind::PermissionDenied,
+            other =&gt; ErrorKind::Io(other),
+        }
+        .into()
+    }
+}
+
+<span class="attr">#[cfg(feature = <span class="string">"time"</span>)]
+</span><span class="kw">impl </span>From&lt;time::error::ComponentRange&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(<span class="kw">_</span>: time::error::ComponentRange) -&gt; Error {
+        ErrorKind::DateTime.into()
+    }
+}
 
 <span class="doccomment">/// Error type.
 </span><span class="attr">#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 </span><span class="kw">pub enum </span>ErrorKind {
-    <span class="doccomment">/// Indicates a field which is duplicated when only one is expected.
-    </span>DuplicateField {
-        <span class="doccomment">/// Tag of the duplicated field.
-        </span>tag: Tag,
-    },
+    <span class="doccomment">/// Date-and-time related errors.
+    </span>DateTime,
 
     <span class="doccomment">/// This error indicates a previous DER parsing operation resulted in
     /// an error and tainted the state of a `Decoder` or `Encoder`.
@@ -374,6 +541,32 @@
     /// Once this occurs, the overall operation has failed and cannot be
     /// subsequently resumed.
     </span>Failed,
+
+    <span class="doccomment">/// File not found error.
+    </span><span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
+    </span>FileNotFound,
+
+    <span class="doccomment">/// Message is incomplete and does not contain all of the expected data.
+    </span>Incomplete {
+        <span class="doccomment">/// Expected message length.
+        ///
+        /// Note that this length represents a *minimum* lower bound on how
+        /// much additional data is needed to continue parsing the message.
+        ///
+        /// It's possible upon subsequent message parsing that the parser will
+        /// discover even more data is needed.
+        </span>expected_len: Length,
+
+        <span class="doccomment">/// Actual length of the message buffer currently being processed.
+        </span>actual_len: Length,
+    },
+
+    <span class="doccomment">/// I/O errors.
+    </span><span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
+    </span>Io(std::io::ErrorKind),
+
+    <span class="doccomment">/// Indefinite length disallowed.
+    </span>IndefiniteLength,
 
     <span class="doccomment">/// Incorrect length for a given field.
     </span>Length {
@@ -387,40 +580,58 @@
         </span>tag: Tag,
     },
 
-    <span class="doccomment">/// Malformed OID
-    </span>MalformedOid,
+    <span class="doccomment">/// OID is improperly encoded.
+    </span>OidMalformed,
+
+    <span class="doccomment">/// Unknown OID.
+    ///
+    /// This error is intended to be used by libraries which parse DER-based
+    /// formats which encounter unknown or unsupported OID libraries.
+    ///
+    /// It enables passing back the OID value to the caller, which allows them
+    /// to determine which OID(s) are causing the error (and then potentially
+    /// contribute upstream support for algorithms they care about).
+    </span><span class="attr">#[cfg(feature = <span class="string">"oid"</span>)]
+    </span>OidUnknown {
+        <span class="doccomment">/// OID value that was unrecognized by a parser for a DER-based format.
+        </span>oid: ObjectIdentifier,
+    },
+
+    <span class="doccomment">/// `SET` cannot contain duplicates.
+    </span>SetDuplicate,
+
+    <span class="doccomment">/// `SET` ordering error: items not in canonical order.
+    </span>SetOrdering,
 
     <span class="doccomment">/// Integer overflow occurred (library bug!).
     </span>Overflow,
 
-    <span class="doccomment">/// Message is longer than this library&#39;s internal limits support.
+    <span class="doccomment">/// Message is longer than this library's internal limits support.
     </span>Overlength,
 
-    <span class="doccomment">/// Undecoded trailing data at end of message.
-    </span>TrailingData {
-        <span class="doccomment">/// Length of the decoded data.
-        </span>decoded: Length,
+    <span class="doccomment">/// PEM encoding errors.
+    </span><span class="attr">#[cfg(feature = <span class="string">"pem"</span>)]
+    </span>Pem(pem::Error),
 
-        <span class="doccomment">/// Total length of the remaining data left in the buffer.
-        </span>remaining: Length,
-    },
+    <span class="doccomment">/// Permission denied reading file.
+    </span><span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
+    </span>PermissionDenied,
 
-    <span class="doccomment">/// Unexpected end-of-message/nested field when decoding.
-    </span>Truncated,
+    <span class="doccomment">/// Reader does not support the requested operation.
+    </span>Reader,
 
-    <span class="doccomment">/// Encoded message is shorter than the expected length.
+    <span class="doccomment">/// Unknown tag mode.
+    </span>TagModeUnknown,
+
+    <span class="doccomment">/// Invalid tag number.
     ///
-    /// (i.e. an `Encodable` impl on a particular type has a buggy `encoded_len`)
-    </span>Underlength {
-        <span class="doccomment">/// Expected length
-        </span>expected: Length,
-
-        <span class="doccomment">/// Actual length
-        </span>actual: Length,
-    },
+    /// The "tag number" is the lower 5-bits of a tag's octet.
+    /// This error occurs in the case that all 5-bits are set to `1`,
+    /// which indicates a multi-byte tag which is unsupported by this library.
+    </span>TagNumberInvalid,
 
     <span class="doccomment">/// Unexpected tag.
-    </span>UnexpectedTag {
+    </span>TagUnexpected {
         <span class="doccomment">/// Tag the decoder was expecting (if there is a single such tag).
         ///
         /// `None` if multiple tags are expected/allowed, but the `actual` tag
@@ -431,25 +642,19 @@
         </span>actual: Tag,
     },
 
-    <span class="doccomment">/// Unknown OID.
-    ///
-    /// This error is intended to be used by libraries which parse DER-based
-    /// formats which encounter unknown or unsupported OID libraries.
-    ///
-    /// It enables passing back the OID value to the caller, which allows them
-    /// to determine which OID(s) are causing the error (and then potentially
-    /// contribute upstream support for algorithms they care about).
-    </span><span class="attr">#[cfg(feature = <span class="string">&quot;oid&quot;</span>)]
-    #[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;oid&quot;</span>)))]
-    </span>UnknownOid {
-        <span class="doccomment">/// OID value that was unrecognized by a parser for a DER-based format.
-        </span>oid: ObjectIdentifier,
-    },
-
     <span class="doccomment">/// Unknown/unsupported tag.
-    </span>UnknownTag {
+    </span>TagUnknown {
         <span class="doccomment">/// Raw byte value of the tag.
         </span>byte: u8,
+    },
+
+    <span class="doccomment">/// Undecoded trailing data at end of message.
+    </span>TrailingData {
+        <span class="doccomment">/// Length of the decoded data.
+        </span>decoded: Length,
+
+        <span class="doccomment">/// Total length of the remaining data left in the buffer.
+        </span>remaining: Length,
     },
 
     <span class="doccomment">/// UTF-8 errors.
@@ -471,48 +676,64 @@
 }
 
 <span class="kw">impl </span>fmt::Display <span class="kw">for </span>ErrorKind {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="kw">match </span><span class="self">self </span>{
-            ErrorKind::DuplicateField { tag } =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;duplicate field for {}&quot;</span>, tag),
-            ErrorKind::Failed =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;operation failed&quot;</span>),
-            ErrorKind::Length { tag } =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;incorrect length for {}&quot;</span>, tag),
+            ErrorKind::DateTime =&gt; <span class="macro">write!</span>(f, <span class="string">"date/time error"</span>),
+            ErrorKind::Failed =&gt; <span class="macro">write!</span>(f, <span class="string">"operation failed"</span>),
+            <span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
+            </span>ErrorKind::FileNotFound =&gt; <span class="macro">write!</span>(f, <span class="string">"file not found"</span>),
+            ErrorKind::Incomplete {
+                expected_len,
+                actual_len,
+            } =&gt; <span class="macro">write!</span>(
+                f,
+                <span class="string">"ASN.1 DER message is incomplete: expected {}, actual {}"</span>,
+                expected_len, actual_len
+            ),
+            <span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
+            </span>ErrorKind::Io(err) =&gt; <span class="macro">write!</span>(f, <span class="string">"I/O error: {:?}"</span>, err),
+            ErrorKind::IndefiniteLength =&gt; <span class="macro">write!</span>(f, <span class="string">"indefinite length disallowed"</span>),
+            ErrorKind::Length { tag } =&gt; <span class="macro">write!</span>(f, <span class="string">"incorrect length for {}"</span>, tag),
             ErrorKind::Noncanonical { tag } =&gt; {
-                <span class="macro">write!</span>(f, <span class="string">&quot;ASN.1 {} not canonically encoded as DER&quot;</span>, tag)
+                <span class="macro">write!</span>(f, <span class="string">"ASN.1 {} not canonically encoded as DER"</span>, tag)
             }
-            ErrorKind::MalformedOid =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;malformed OID&quot;</span>),
-            ErrorKind::Overflow =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;integer overflow&quot;</span>),
-            ErrorKind::Overlength =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;DER message is too long&quot;</span>),
+            ErrorKind::OidMalformed =&gt; <span class="macro">write!</span>(f, <span class="string">"malformed OID"</span>),
+            <span class="attr">#[cfg(feature = <span class="string">"oid"</span>)]
+            </span>ErrorKind::OidUnknown { oid } =&gt; {
+                <span class="macro">write!</span>(f, <span class="string">"unknown/unsupported OID: {}"</span>, oid)
+            }
+            ErrorKind::SetDuplicate =&gt; <span class="macro">write!</span>(f, <span class="string">"SET OF contains duplicate"</span>),
+            ErrorKind::SetOrdering =&gt; <span class="macro">write!</span>(f, <span class="string">"SET OF ordering error"</span>),
+            ErrorKind::Overflow =&gt; <span class="macro">write!</span>(f, <span class="string">"integer overflow"</span>),
+            ErrorKind::Overlength =&gt; <span class="macro">write!</span>(f, <span class="string">"ASN.1 DER message is too long"</span>),
+            <span class="attr">#[cfg(feature = <span class="string">"pem"</span>)]
+            </span>ErrorKind::Pem(e) =&gt; <span class="macro">write!</span>(f, <span class="string">"PEM error: {}"</span>, e),
+            <span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
+            </span>ErrorKind::PermissionDenied =&gt; <span class="macro">write!</span>(f, <span class="string">"permission denied"</span>),
+            ErrorKind::Reader =&gt; <span class="macro">write!</span>(f, <span class="string">"reader does not support the requested operation"</span>),
+            ErrorKind::TagModeUnknown =&gt; <span class="macro">write!</span>(f, <span class="string">"unknown tag mode"</span>),
+            ErrorKind::TagNumberInvalid =&gt; <span class="macro">write!</span>(f, <span class="string">"invalid tag number"</span>),
+            ErrorKind::TagUnexpected { expected, actual } =&gt; {
+                <span class="macro">write!</span>(f, <span class="string">"unexpected ASN.1 DER tag: "</span>)<span class="question-mark">?</span>;
+
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(tag) = expected {
+                    <span class="macro">write!</span>(f, <span class="string">"expected {}, "</span>, tag)<span class="question-mark">?</span>;
+                }
+
+                <span class="macro">write!</span>(f, <span class="string">"got {}"</span>, actual)
+            }
+            ErrorKind::TagUnknown { byte } =&gt; {
+                <span class="macro">write!</span>(f, <span class="string">"unknown/unsupported ASN.1 DER tag: 0x{:02x}"</span>, byte)
+            }
             ErrorKind::TrailingData { decoded, remaining } =&gt; {
                 <span class="macro">write!</span>(
                     f,
-                    <span class="string">&quot;trailing data at end of DER message: decoded {} bytes, {} bytes remaining&quot;</span>,
+                    <span class="string">"trailing data at end of DER message: decoded {} bytes, {} bytes remaining"</span>,
                     decoded, remaining
                 )
             }
-            ErrorKind::Truncated =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;DER message is truncated&quot;</span>),
-            ErrorKind::Underlength { expected, actual } =&gt; <span class="macro">write!</span>(
-                f,
-                <span class="string">&quot;DER message too short: expected {}, got {}&quot;</span>,
-                expected, actual
-            ),
-            ErrorKind::UnexpectedTag { expected, actual } =&gt; {
-                <span class="macro">write!</span>(f, <span class="string">&quot;unexpected ASN.1 DER tag: &quot;</span>)<span class="question-mark">?</span>;
-
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(tag) = expected {
-                    <span class="macro">write!</span>(f, <span class="string">&quot;expected {}, &quot;</span>, tag)<span class="question-mark">?</span>;
-                }
-
-                <span class="macro">write!</span>(f, <span class="string">&quot;got {}&quot;</span>, actual)
-            }
-            <span class="attr">#[cfg(feature = <span class="string">&quot;oid&quot;</span>)]
-            </span>ErrorKind::UnknownOid { oid } =&gt; {
-                <span class="macro">write!</span>(f, <span class="string">&quot;unknown/unsupported OID: {}&quot;</span>, oid)
-            }
-            ErrorKind::UnknownTag { byte } =&gt; {
-                <span class="macro">write!</span>(f, <span class="string">&quot;unknown/unsupported ASN.1 DER tag: 0x{:02x}&quot;</span>, byte)
-            }
-            ErrorKind::Utf8(e) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, e),
-            ErrorKind::Value { tag } =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;malformed ASN.1 DER value for {}&quot;</span>, tag),
+            ErrorKind::Utf8(e) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}"</span>, e),
+            ErrorKind::Value { tag } =&gt; <span class="macro">write!</span>(f, <span class="string">"malformed ASN.1 DER value for {}"</span>, tag),
         }
     }
 }

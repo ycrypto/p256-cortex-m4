@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"type":["EphemeralSecret","SharedSecret"]};
+window.SIDEBAR_ITEMS = {"fn":["diffie_hellman"],"type":["EphemeralSecret","SharedSecret"]};

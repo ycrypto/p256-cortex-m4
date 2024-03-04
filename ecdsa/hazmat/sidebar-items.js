@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["DigestPrimitive","FromDigest","RecoverableSignPrimitive","SignPrimitive","VerifyPrimitive"]};
+window.SIDEBAR_ITEMS = {"fn":["bits2field","sign_prehashed","verify_prehashed"],"trait":["DigestPrimitive","SignPrimitive","VerifyPrimitive"]};

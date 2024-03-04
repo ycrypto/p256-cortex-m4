@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crypto-bigint-0.2.11/src/uint/div.rs`."><title>div.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="crypto_bigint" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../crypto_bigint/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crypto-bigint-0.5.5/src/uint/div.rs`."><title>div.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="crypto_bigint" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../crypto_bigint/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="crypto_bigint"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -457,384 +458,911 @@
 <a href="#457" id="457">457</a>
 <a href="#458" id="458">458</a>
 <a href="#459" id="459">459</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! [`UInt`] division operations.
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
+<a href="#495" id="495">495</a>
+<a href="#496" id="496">496</a>
+<a href="#497" id="497">497</a>
+<a href="#498" id="498">498</a>
+<a href="#499" id="499">499</a>
+<a href="#500" id="500">500</a>
+<a href="#501" id="501">501</a>
+<a href="#502" id="502">502</a>
+<a href="#503" id="503">503</a>
+<a href="#504" id="504">504</a>
+<a href="#505" id="505">505</a>
+<a href="#506" id="506">506</a>
+<a href="#507" id="507">507</a>
+<a href="#508" id="508">508</a>
+<a href="#509" id="509">509</a>
+<a href="#510" id="510">510</a>
+<a href="#511" id="511">511</a>
+<a href="#512" id="512">512</a>
+<a href="#513" id="513">513</a>
+<a href="#514" id="514">514</a>
+<a href="#515" id="515">515</a>
+<a href="#516" id="516">516</a>
+<a href="#517" id="517">517</a>
+<a href="#518" id="518">518</a>
+<a href="#519" id="519">519</a>
+<a href="#520" id="520">520</a>
+<a href="#521" id="521">521</a>
+<a href="#522" id="522">522</a>
+<a href="#523" id="523">523</a>
+<a href="#524" id="524">524</a>
+<a href="#525" id="525">525</a>
+<a href="#526" id="526">526</a>
+<a href="#527" id="527">527</a>
+<a href="#528" id="528">528</a>
+<a href="#529" id="529">529</a>
+<a href="#530" id="530">530</a>
+<a href="#531" id="531">531</a>
+<a href="#532" id="532">532</a>
+<a href="#533" id="533">533</a>
+<a href="#534" id="534">534</a>
+<a href="#535" id="535">535</a>
+<a href="#536" id="536">536</a>
+<a href="#537" id="537">537</a>
+<a href="#538" id="538">538</a>
+<a href="#539" id="539">539</a>
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
+<a href="#542" id="542">542</a>
+<a href="#543" id="543">543</a>
+<a href="#544" id="544">544</a>
+<a href="#545" id="545">545</a>
+<a href="#546" id="546">546</a>
+<a href="#547" id="547">547</a>
+<a href="#548" id="548">548</a>
+<a href="#549" id="549">549</a>
+<a href="#550" id="550">550</a>
+<a href="#551" id="551">551</a>
+<a href="#552" id="552">552</a>
+<a href="#553" id="553">553</a>
+<a href="#554" id="554">554</a>
+<a href="#555" id="555">555</a>
+<a href="#556" id="556">556</a>
+<a href="#557" id="557">557</a>
+<a href="#558" id="558">558</a>
+<a href="#559" id="559">559</a>
+<a href="#560" id="560">560</a>
+<a href="#561" id="561">561</a>
+<a href="#562" id="562">562</a>
+<a href="#563" id="563">563</a>
+<a href="#564" id="564">564</a>
+<a href="#565" id="565">565</a>
+<a href="#566" id="566">566</a>
+<a href="#567" id="567">567</a>
+<a href="#568" id="568">568</a>
+<a href="#569" id="569">569</a>
+<a href="#570" id="570">570</a>
+<a href="#571" id="571">571</a>
+<a href="#572" id="572">572</a>
+<a href="#573" id="573">573</a>
+<a href="#574" id="574">574</a>
+<a href="#575" id="575">575</a>
+<a href="#576" id="576">576</a>
+<a href="#577" id="577">577</a>
+<a href="#578" id="578">578</a>
+<a href="#579" id="579">579</a>
+<a href="#580" id="580">580</a>
+<a href="#581" id="581">581</a>
+<a href="#582" id="582">582</a>
+<a href="#583" id="583">583</a>
+<a href="#584" id="584">584</a>
+<a href="#585" id="585">585</a>
+<a href="#586" id="586">586</a>
+<a href="#587" id="587">587</a>
+<a href="#588" id="588">588</a>
+<a href="#589" id="589">589</a>
+<a href="#590" id="590">590</a>
+<a href="#591" id="591">591</a>
+<a href="#592" id="592">592</a>
+<a href="#593" id="593">593</a>
+<a href="#594" id="594">594</a>
+<a href="#595" id="595">595</a>
+<a href="#596" id="596">596</a>
+<a href="#597" id="597">597</a>
+<a href="#598" id="598">598</a>
+<a href="#599" id="599">599</a>
+<a href="#600" id="600">600</a>
+<a href="#601" id="601">601</a>
+<a href="#602" id="602">602</a>
+<a href="#603" id="603">603</a>
+<a href="#604" id="604">604</a>
+<a href="#605" id="605">605</a>
+<a href="#606" id="606">606</a>
+<a href="#607" id="607">607</a>
+<a href="#608" id="608">608</a>
+<a href="#609" id="609">609</a>
+<a href="#610" id="610">610</a>
+<a href="#611" id="611">611</a>
+<a href="#612" id="612">612</a>
+<a href="#613" id="613">613</a>
+<a href="#614" id="614">614</a>
+<a href="#615" id="615">615</a>
+<a href="#616" id="616">616</a>
+<a href="#617" id="617">617</a>
+<a href="#618" id="618">618</a>
+<a href="#619" id="619">619</a>
+<a href="#620" id="620">620</a>
+<a href="#621" id="621">621</a>
+<a href="#622" id="622">622</a>
+<a href="#623" id="623">623</a>
+<a href="#624" id="624">624</a>
+<a href="#625" id="625">625</a>
+<a href="#626" id="626">626</a>
+<a href="#627" id="627">627</a>
+<a href="#628" id="628">628</a>
+<a href="#629" id="629">629</a>
+<a href="#630" id="630">630</a>
+<a href="#631" id="631">631</a>
+<a href="#632" id="632">632</a>
+<a href="#633" id="633">633</a>
+<a href="#634" id="634">634</a>
+<a href="#635" id="635">635</a>
+<a href="#636" id="636">636</a>
+<a href="#637" id="637">637</a>
+<a href="#638" id="638">638</a>
+<a href="#639" id="639">639</a>
+<a href="#640" id="640">640</a>
+<a href="#641" id="641">641</a>
+<a href="#642" id="642">642</a>
+<a href="#643" id="643">643</a>
+<a href="#644" id="644">644</a>
+<a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
+<a href="#647" id="647">647</a>
+<a href="#648" id="648">648</a>
+<a href="#649" id="649">649</a>
+<a href="#650" id="650">650</a>
+<a href="#651" id="651">651</a>
+<a href="#652" id="652">652</a>
+<a href="#653" id="653">653</a>
+<a href="#654" id="654">654</a>
+<a href="#655" id="655">655</a>
+<a href="#656" id="656">656</a>
+<a href="#657" id="657">657</a>
+<a href="#658" id="658">658</a>
+<a href="#659" id="659">659</a>
+<a href="#660" id="660">660</a>
+<a href="#661" id="661">661</a>
+<a href="#662" id="662">662</a>
+<a href="#663" id="663">663</a>
+<a href="#664" id="664">664</a>
+<a href="#665" id="665">665</a>
+<a href="#666" id="666">666</a>
+<a href="#667" id="667">667</a>
+<a href="#668" id="668">668</a>
+<a href="#669" id="669">669</a>
+<a href="#670" id="670">670</a>
+<a href="#671" id="671">671</a>
+<a href="#672" id="672">672</a>
+<a href="#673" id="673">673</a>
+<a href="#674" id="674">674</a>
+<a href="#675" id="675">675</a>
+<a href="#676" id="676">676</a>
+<a href="#677" id="677">677</a>
+<a href="#678" id="678">678</a>
+<a href="#679" id="679">679</a>
+<a href="#680" id="680">680</a>
+<a href="#681" id="681">681</a>
+<a href="#682" id="682">682</a>
+<a href="#683" id="683">683</a>
+<a href="#684" id="684">684</a>
+<a href="#685" id="685">685</a>
+<a href="#686" id="686">686</a>
+<a href="#687" id="687">687</a>
+<a href="#688" id="688">688</a>
+<a href="#689" id="689">689</a>
+<a href="#690" id="690">690</a>
+<a href="#691" id="691">691</a>
+<a href="#692" id="692">692</a>
+<a href="#693" id="693">693</a>
+<a href="#694" id="694">694</a>
+<a href="#695" id="695">695</a>
+<a href="#696" id="696">696</a>
+<a href="#697" id="697">697</a>
+<a href="#698" id="698">698</a>
+<a href="#699" id="699">699</a>
+<a href="#700" id="700">700</a>
+<a href="#701" id="701">701</a>
+<a href="#702" id="702">702</a>
+<a href="#703" id="703">703</a>
+<a href="#704" id="704">704</a>
+<a href="#705" id="705">705</a>
+<a href="#706" id="706">706</a>
+<a href="#707" id="707">707</a>
+<a href="#708" id="708">708</a>
+<a href="#709" id="709">709</a>
+<a href="#710" id="710">710</a>
+<a href="#711" id="711">711</a>
+<a href="#712" id="712">712</a>
+<a href="#713" id="713">713</a>
+<a href="#714" id="714">714</a>
+<a href="#715" id="715">715</a>
+<a href="#716" id="716">716</a>
+<a href="#717" id="717">717</a>
+<a href="#718" id="718">718</a>
+<a href="#719" id="719">719</a>
+<a href="#720" id="720">720</a>
+<a href="#721" id="721">721</a>
+<a href="#722" id="722">722</a>
+<a href="#723" id="723">723</a>
+<a href="#724" id="724">724</a>
+<a href="#725" id="725">725</a>
+<a href="#726" id="726">726</a>
+<a href="#727" id="727">727</a>
+<a href="#728" id="728">728</a>
+<a href="#729" id="729">729</a>
+<a href="#730" id="730">730</a>
+<a href="#731" id="731">731</a>
+<a href="#732" id="732">732</a>
+<a href="#733" id="733">733</a>
+<a href="#734" id="734">734</a>
+<a href="#735" id="735">735</a>
+<a href="#736" id="736">736</a>
+<a href="#737" id="737">737</a>
+<a href="#738" id="738">738</a>
+<a href="#739" id="739">739</a>
+<a href="#740" id="740">740</a>
+<a href="#741" id="741">741</a>
+<a href="#742" id="742">742</a>
+<a href="#743" id="743">743</a>
+<a href="#744" id="744">744</a>
+<a href="#745" id="745">745</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! [`Uint`] division operations.
 
-</span><span class="kw">use </span><span class="kw">super</span>::UInt;
-<span class="kw">use </span><span class="kw">crate</span>::limb::{Inner, SignedInner, BIT_SIZE};
-<span class="kw">use crate</span>::{Integer, Limb, NonZero, Wrapping};
+</span><span class="kw">use </span><span class="kw">super</span>::div_limb::{div_rem_limb_with_reciprocal, Reciprocal};
+<span class="kw">use crate</span>::{CtChoice, Limb, NonZero, Uint, Word, Wrapping};
 <span class="kw">use </span>core::ops::{Div, DivAssign, Rem, RemAssign};
-<span class="kw">use </span>subtle::{Choice, CtOption};
+<span class="kw">use </span>subtle::CtOption;
 
-<span class="kw">const </span>BIT_SIZE_M_1: usize = BIT_SIZE - <span class="number">1</span>;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Uint&lt;LIMBS&gt; {
+    <span class="doccomment">/// Computes `self` / `rhs` using a pre-made reciprocal,
+    /// returns the quotient (q) and remainder (r).
+    </span><span class="attr">#[inline(always)]
+    </span><span class="kw">pub const fn </span>ct_div_rem_limb_with_reciprocal(<span class="kw-2">&amp;</span><span class="self">self</span>, reciprocal: <span class="kw-2">&amp;</span>Reciprocal) -&gt; (<span class="self">Self</span>, Limb) {
+        div_rem_limb_with_reciprocal(<span class="self">self</span>, reciprocal)
+    }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; UInt&lt;LIMBS&gt; {
+    <span class="doccomment">/// Computes `self` / `rhs` using a pre-made reciprocal,
+    /// returns the quotient (q) and remainder (r).
+    </span><span class="attr">#[inline(always)]
+    </span><span class="kw">pub fn </span>div_rem_limb_with_reciprocal(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        reciprocal: <span class="kw-2">&amp;</span>CtOption&lt;Reciprocal&gt;,
+    ) -&gt; CtOption&lt;(<span class="self">Self</span>, Limb)&gt; {
+        reciprocal.map(|r| div_rem_limb_with_reciprocal(<span class="self">self</span>, <span class="kw-2">&amp;</span>r))
+    }
+
+    <span class="doccomment">/// Computes `self` / `rhs`, returns the quotient (q) and remainder (r).
+    /// Returns the truthy value as the third element of the tuple if `rhs != 0`,
+    /// and the falsy value otherwise.
+    </span><span class="attr">#[inline(always)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>ct_div_rem_limb(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: Limb) -&gt; (<span class="self">Self</span>, Limb, CtChoice) {
+        <span class="kw">let </span>(reciprocal, is_some) = Reciprocal::ct_new(rhs);
+        <span class="kw">let </span>(quo, rem) = div_rem_limb_with_reciprocal(<span class="self">self</span>, <span class="kw-2">&amp;</span>reciprocal);
+        (quo, rem, is_some)
+    }
+
+    <span class="doccomment">/// Computes `self` / `rhs`, returns the quotient (q) and remainder (r).
+    </span><span class="attr">#[inline(always)]
+    </span><span class="kw">pub fn </span>div_rem_limb(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) -&gt; (<span class="self">Self</span>, Limb) {
+        <span class="comment">// Guaranteed to succeed since `rhs` is nonzero.
+        </span><span class="kw">let </span>(quo, rem, _is_some) = <span class="self">self</span>.ct_div_rem_limb(<span class="kw-2">*</span>rhs);
+        (quo, rem)
+    }
+
     <span class="doccomment">/// Computes `self` / `rhs`, returns the quotient (q), remainder (r)
-    /// and 1 for is_some or 0 for is_none. The results can be wrapped in [`CtOption`].
-    /// NOTE: Use only if you need to access const fn. Otherwise use `div_rem` because
+    /// and the truthy value for is_some or the falsy value for is_none.
+    ///
+    /// NOTE: Use only if you need to access const fn. Otherwise use [`Self::div_rem`] because
     /// the value for is_some needs to be checked before using `q` and `r`.
     ///
     /// This is variable only with respect to `rhs`.
     ///
     /// When used with a fixed `rhs`, this function is constant-time with respect
     /// to `self`.
-    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>ct_div_rem(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; (<span class="self">Self</span>, <span class="self">Self</span>, u8) {
-        <span class="kw">let </span><span class="kw-2">mut </span>bd = <span class="self">self</span>.bits().saturating_sub(rhs.bits()) <span class="kw">as </span>usize;
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>ct_div_rem(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; (<span class="self">Self</span>, <span class="self">Self</span>, CtChoice) {
+        <span class="kw">let </span>mb = rhs.bits_vartime();
+        <span class="kw">let </span><span class="kw-2">mut </span>bd = <span class="self">Self</span>::BITS - mb;
         <span class="kw">let </span><span class="kw-2">mut </span>rem = <span class="kw-2">*</span><span class="self">self</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>quo = <span class="self">Self</span>::ZERO;
-
         <span class="kw">let </span><span class="kw-2">mut </span>c = rhs.shl_vartime(bd);
-        <span class="kw">let </span><span class="kw-2">mut </span>e = <span class="self">Self</span>::ONE.shl_vartime(bd);
 
         <span class="kw">loop </span>{
-            <span class="kw">let </span><span class="kw-2">mut </span>r: <span class="self">Self </span>= rem.wrapping_sub(<span class="kw-2">&amp;</span>c);
-            <span class="kw">let </span>d = -(((<span class="number">1 </span>- (r.limbs[LIMBS - <span class="number">1</span>].<span class="number">0 </span>&gt;&gt; BIT_SIZE_M_1)) &amp; <span class="number">1</span>) <span class="kw">as </span>SignedInner);
-            <span class="kw">let </span>d = d <span class="kw">as </span>Inner;
-            rem = <span class="self">Self</span>::ct_select(rem, r, d);
-            r = quo;
-            r = r.wrapping_add(<span class="kw-2">&amp;</span>e);
-            quo = <span class="self">Self</span>::ct_select(quo, r, d);
+            <span class="kw">let </span>(<span class="kw-2">mut </span>r, borrow) = rem.sbb(<span class="kw-2">&amp;</span>c, Limb::ZERO);
+            rem = <span class="self">Self</span>::ct_select(<span class="kw-2">&amp;</span>r, <span class="kw-2">&amp;</span>rem, CtChoice::from_mask(borrow.<span class="number">0</span>));
+            r = quo.bitor(<span class="kw-2">&amp;</span><span class="self">Self</span>::ONE);
+            quo = <span class="self">Self</span>::ct_select(<span class="kw-2">&amp;</span>r, <span class="kw-2">&amp;</span>quo, CtChoice::from_mask(borrow.<span class="number">0</span>));
             <span class="kw">if </span>bd == <span class="number">0 </span>{
                 <span class="kw">break</span>;
             }
             bd -= <span class="number">1</span>;
             c = c.shr_vartime(<span class="number">1</span>);
-            e = e.shr_vartime(<span class="number">1</span>);
+            quo = quo.shl_vartime(<span class="number">1</span>);
         }
-        <span class="comment">// If `self`&lt;rhs
-        // set quo and rem to Self::ZERO
-        </span><span class="kw">let </span>res = <span class="self">self</span>.ct_cmp(rhs) + <span class="number">1</span>;
-        <span class="kw">let </span>gt = Limb::is_nonzero(Limb(res <span class="kw">as </span>Inner));
-        quo = <span class="self">Self</span>::ct_select(<span class="self">Self</span>::ZERO, quo, gt);
-        rem = <span class="self">Self</span>::ct_select(<span class="self">Self</span>::ZERO, rem, gt);
-        <span class="kw">let </span>is_some = rhs.ct_is_nonzero() &amp; <span class="number">1</span>;
-        (quo, rem, is_some <span class="kw">as </span>u8)
+
+        <span class="kw">let </span>is_some = Limb(mb <span class="kw">as </span>Word).ct_is_nonzero();
+        quo = <span class="self">Self</span>::ct_select(<span class="kw-2">&amp;</span><span class="self">Self</span>::ZERO, <span class="kw-2">&amp;</span>quo, is_some);
+        (quo, rem, is_some)
     }
 
     <span class="doccomment">/// Computes `self` % `rhs`, returns the remainder and
-    /// and 1 for is_some or 0 for is_none. The results can be wrapped in [`CtOption`].
-    /// NOTE: Use only if you need to access const fn. Otherwise use `reduce`
+    /// and the truthy value for is_some or the falsy value for is_none.
+    ///
+    /// NOTE: Use only if you need to access const fn. Otherwise use [`Self::rem`].
     /// This is variable only with respect to `rhs`.
     ///
     /// When used with a fixed `rhs`, this function is constant-time with respect
     /// to `self`.
-    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>ct_reduce(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; (<span class="self">Self</span>, u8) {
-        <span class="kw">let </span><span class="kw-2">mut </span>bd = <span class="self">self</span>.bits().saturating_sub(rhs.bits()) <span class="kw">as </span>usize;
+    </span><span class="kw">pub const fn </span>const_rem(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; (<span class="self">Self</span>, CtChoice) {
+        <span class="kw">let </span>mb = rhs.bits_vartime();
+        <span class="kw">let </span><span class="kw-2">mut </span>bd = <span class="self">Self</span>::BITS - mb;
         <span class="kw">let </span><span class="kw-2">mut </span>rem = <span class="kw-2">*</span><span class="self">self</span>;
-
         <span class="kw">let </span><span class="kw-2">mut </span>c = rhs.shl_vartime(bd);
 
         <span class="kw">loop </span>{
-            <span class="kw">let </span>r: <span class="self">Self </span>= rem.wrapping_sub(<span class="kw-2">&amp;</span>c);
-            <span class="kw">let </span>d = -(((<span class="number">1 </span>- (r.limbs[LIMBS - <span class="number">1</span>].<span class="number">0 </span>&gt;&gt; BIT_SIZE_M_1)) &amp; <span class="number">1</span>) <span class="kw">as </span>SignedInner);
-            <span class="kw">let </span>d = d <span class="kw">as </span>Inner;
-            rem = <span class="self">Self</span>::ct_select(rem, r, d);
+            <span class="kw">let </span>(r, borrow) = rem.sbb(<span class="kw-2">&amp;</span>c, Limb::ZERO);
+            rem = <span class="self">Self</span>::ct_select(<span class="kw-2">&amp;</span>r, <span class="kw-2">&amp;</span>rem, CtChoice::from_mask(borrow.<span class="number">0</span>));
             <span class="kw">if </span>bd == <span class="number">0 </span>{
                 <span class="kw">break</span>;
             }
             bd -= <span class="number">1</span>;
             c = c.shr_vartime(<span class="number">1</span>);
         }
-        <span class="comment">// If `self`&lt;rhs
-        // set rem to Self::ZERO
-        </span><span class="kw">let </span>res = <span class="self">self</span>.ct_cmp(rhs) + <span class="number">1</span>;
-        <span class="kw">let </span>gt = Limb::is_nonzero(Limb(res <span class="kw">as </span>Inner));
-        rem = <span class="self">Self</span>::ct_select(<span class="self">Self</span>::ZERO, rem, gt);
-        <span class="kw">let </span>is_some = rhs.ct_is_nonzero() &amp; <span class="number">1</span>;
-        (rem, is_some <span class="kw">as </span>u8)
+
+        <span class="kw">let </span>is_some = Limb(mb <span class="kw">as </span>Word).ct_is_nonzero();
+        (rem, is_some)
     }
 
-    <span class="doccomment">/// Computes self / rhs, returns the quotient, remainder
-    /// if rhs != 0
-    </span><span class="kw">pub fn </span>div_rem(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; CtOption&lt;(<span class="self">Self</span>, <span class="self">Self</span>)&gt; {
-        <span class="kw">let </span>(q, r, c) = <span class="self">self</span>.ct_div_rem(rhs);
-        CtOption::new((q, r), Choice::from(c))
+    <span class="doccomment">/// Computes `self` % `rhs`, returns the remainder and
+    /// and the truthy value for is_some or the falsy value for is_none.
+    ///
+    /// This is variable only with respect to `rhs`.
+    ///
+    /// When used with a fixed `rhs`, this function is constant-time with respect
+    /// to `self`.
+    </span><span class="kw">pub const fn </span>const_rem_wide(lower_upper: (<span class="self">Self</span>, <span class="self">Self</span>), rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; (<span class="self">Self</span>, CtChoice) {
+        <span class="kw">let </span>mb = rhs.bits_vartime();
+
+        <span class="comment">// The number of bits to consider is two sets of limbs * BITS - mb (modulus bitcount)
+        </span><span class="kw">let </span><span class="kw-2">mut </span>bd = (<span class="number">2 </span>* <span class="self">Self</span>::BITS) - mb;
+
+        <span class="comment">// The wide integer to reduce, split into two halves
+        </span><span class="kw">let </span>(<span class="kw-2">mut </span>lower, <span class="kw-2">mut </span>upper) = lower_upper;
+
+        <span class="comment">// Factor of the modulus, split into two halves
+        </span><span class="kw">let </span><span class="kw-2">mut </span>c = <span class="self">Self</span>::shl_vartime_wide((<span class="kw-2">*</span>rhs, Uint::ZERO), bd);
+
+        <span class="kw">loop </span>{
+            <span class="kw">let </span>(lower_sub, borrow) = lower.sbb(<span class="kw-2">&amp;</span>c.<span class="number">0</span>, Limb::ZERO);
+            <span class="kw">let </span>(upper_sub, borrow) = upper.sbb(<span class="kw-2">&amp;</span>c.<span class="number">1</span>, borrow);
+
+            lower = <span class="self">Self</span>::ct_select(<span class="kw-2">&amp;</span>lower_sub, <span class="kw-2">&amp;</span>lower, CtChoice::from_mask(borrow.<span class="number">0</span>));
+            upper = <span class="self">Self</span>::ct_select(<span class="kw-2">&amp;</span>upper_sub, <span class="kw-2">&amp;</span>upper, CtChoice::from_mask(borrow.<span class="number">0</span>));
+            <span class="kw">if </span>bd == <span class="number">0 </span>{
+                <span class="kw">break</span>;
+            }
+            bd -= <span class="number">1</span>;
+            c = <span class="self">Self</span>::shr_vartime_wide(c, <span class="number">1</span>);
+        }
+
+        <span class="kw">let </span>is_some = Limb(mb <span class="kw">as </span>Word).ct_is_nonzero();
+        (lower, is_some)
     }
 
-    <span class="doccomment">/// Computes self % rhs, returns the remainder
-    /// if rhs != 0
-    </span><span class="kw">pub fn </span>reduce(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">let </span>(r, c) = <span class="self">self</span>.ct_reduce(rhs);
-        CtOption::new(r, Choice::from(c))
+    <span class="doccomment">/// Computes `self` % 2^k. Faster than reduce since its a power of 2.
+    /// Limited to 2^16-1 since Uint doesn't support higher.
+    </span><span class="kw">pub const fn </span>rem2k(<span class="kw-2">&amp;</span><span class="self">self</span>, k: usize) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>highest = (LIMBS - <span class="number">1</span>) <span class="kw">as </span>u32;
+        <span class="kw">let </span>index = k <span class="kw">as </span>u32 / (Limb::BITS <span class="kw">as </span>u32);
+        <span class="kw">let </span>le = Limb::ct_le(Limb::from_u32(index), Limb::from_u32(highest));
+        <span class="kw">let </span>word = Limb::ct_select(Limb::from_u32(highest), Limb::from_u32(index), le).<span class="number">0 </span><span class="kw">as </span>usize;
+
+        <span class="kw">let </span>base = k % Limb::BITS;
+        <span class="kw">let </span>mask = (<span class="number">1 </span>&lt;&lt; base) - <span class="number">1</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>out = <span class="kw-2">*</span><span class="self">self</span>;
+
+        <span class="kw">let </span>outmask = Limb(out.limbs[word].<span class="number">0 </span>&amp; mask);
+
+        out.limbs[word] = Limb::ct_select(out.limbs[word], outmask, le);
+
+        <span class="kw">let </span><span class="kw-2">mut </span>i = word + <span class="number">1</span>;
+        <span class="kw">while </span>i &lt; LIMBS {
+            out.limbs[i] = Limb::ZERO;
+            i += <span class="number">1</span>;
+        }
+
+        out
+    }
+
+    <span class="doccomment">/// Computes self / rhs, returns the quotient, remainder.
+    </span><span class="kw">pub fn </span>div_rem(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;<span class="self">Self</span>&gt;) -&gt; (<span class="self">Self</span>, <span class="self">Self</span>) {
+        <span class="comment">// Since `rhs` is nonzero, this should always hold.
+        </span><span class="kw">let </span>(q, r, _c) = <span class="self">self</span>.ct_div_rem(rhs);
+        (q, r)
+    }
+
+    <span class="doccomment">/// Computes self % rhs, returns the remainder.
+    </span><span class="kw">pub fn </span>rem(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;<span class="self">Self</span>&gt;) -&gt; <span class="self">Self </span>{
+        <span class="comment">// Since `rhs` is nonzero, this should always hold.
+        </span><span class="kw">let </span>(r, _c) = <span class="self">self</span>.const_rem(rhs);
+        r
     }
 
     <span class="doccomment">/// Wrapped division is just normal division i.e. `self` / `rhs`
     /// There’s no way wrapping could ever happen.
     /// This function exists, so that all operations are accounted for in the wrapping operations.
+    ///
+    /// Panics if `rhs == 0`.
     </span><span class="kw">pub const fn </span>wrapping_div(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>(q, <span class="kw">_</span>, c) = <span class="self">self</span>.ct_div_rem(rhs);
-        <span class="macro">const_assert!</span>(c == <span class="number">1</span>, <span class="string">&quot;divide by zero&quot;</span>);
+        <span class="macro">assert!</span>(c.is_true_vartime(), <span class="string">"divide by zero"</span>);
         q
     }
 
     <span class="doccomment">/// Perform checked division, returning a [`CtOption`] which `is_some`
     /// only if the rhs != 0
     </span><span class="kw">pub fn </span>checked_div(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">let </span>(q, <span class="kw">_</span>, c) = <span class="self">self</span>.ct_div_rem(rhs);
-        CtOption::new(q, Choice::from(c))
+        NonZero::new(<span class="kw-2">*</span>rhs).map(|rhs| {
+            <span class="kw">let </span>(q, _r) = <span class="self">self</span>.div_rem(<span class="kw-2">&amp;</span>rhs);
+            q
+        })
     }
 
     <span class="doccomment">/// Wrapped (modular) remainder calculation is just `self` % `rhs`.
     /// There’s no way wrapping could ever happen.
     /// This function exists, so that all operations are accounted for in the wrapping operations.
+    ///
+    /// Panics if `rhs == 0`.
     </span><span class="kw">pub const fn </span>wrapping_rem(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span>(r, c) = <span class="self">self</span>.ct_reduce(rhs);
-        <span class="macro">const_assert!</span>(c == <span class="number">1</span>, <span class="string">&quot;modulo zero&quot;</span>);
+        <span class="kw">let </span>(r, c) = <span class="self">self</span>.const_rem(rhs);
+        <span class="macro">assert!</span>(c.is_true_vartime(), <span class="string">"modulo zero"</span>);
         r
     }
 
     <span class="doccomment">/// Perform checked reduction, returning a [`CtOption`] which `is_some`
     /// only if the rhs != 0
     </span><span class="kw">pub fn </span>checked_rem(<span class="kw-2">&amp;</span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">let </span>(r, c) = <span class="self">self</span>.ct_reduce(rhs);
-        CtOption::new(r, Choice::from(c))
+        NonZero::new(<span class="kw-2">*</span>rhs).map(|rhs| <span class="self">self</span>.rem(<span class="kw-2">&amp;</span>rhs))
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">type </span>Output = UInt&lt;LIMBS&gt;;
+<span class="comment">//
+// Division by a single limb
+//
 
-    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+</span><span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
         <span class="kw-2">*</span><span class="self">self </span>/ <span class="kw-2">*</span>rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">type </span>Output = UInt&lt;LIMBS&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
 
-    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
         <span class="self">self </span>/ <span class="kw-2">*</span>rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">type </span>Output = UInt&lt;LIMBS&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
 
-    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
         <span class="kw-2">*</span><span class="self">self </span>/ rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">type </span>Output = UInt&lt;LIMBS&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
 
-    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
-        <span class="kw">let </span>(q, <span class="kw">_</span>, <span class="kw">_</span>) = <span class="self">self</span>.ct_div_rem(<span class="kw-2">&amp;</span>rhs);
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw">let </span>(q, <span class="kw">_</span>, <span class="kw">_</span>) = <span class="self">self</span>.ct_div_rem_limb(<span class="kw-2">*</span>rhs);
         q
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;) {
-        <span class="kw">let </span>(q, <span class="kw">_</span>, <span class="kw">_</span>) = <span class="self">self</span>.ct_div_rem(rhs);
-        <span class="kw-2">*</span><span class="self">self </span>= q
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>/= <span class="kw-2">*</span>rhs;
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;UInt&lt;LIMBS&gt;&gt;) {
-        <span class="kw-2">*</span><span class="self">self </span>/= <span class="kw-2">&amp;</span>rhs;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>/ rhs;
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
 
-    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
-        <span class="kw-2">*</span><span class="self">self </span>/ <span class="kw-2">*</span>rhs
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
+        Wrapping(<span class="self">self</span>.<span class="number">0 </span>/ rhs)
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
 
-    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
-        <span class="self">self </span>/ <span class="kw-2">*</span>rhs
-    }
-}
-
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
-
-    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
         <span class="kw-2">*</span><span class="self">self </span>/ rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
 
-    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="self">Self</span>) -&gt; <span class="self">Self</span>::Output {
-        Wrapping(<span class="self">self</span>.<span class="number">0</span>.checked_div(<span class="kw-2">&amp;</span>rhs.<span class="number">0</span>).unwrap())
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>/ <span class="kw-2">*</span>rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;<span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) {
-        <span class="kw-2">*</span><span class="self">self </span>= Wrapping(<span class="self">self</span>.<span class="number">0</span>.checked_div(<span class="kw-2">&amp;</span>rhs.<span class="number">0</span>).unwrap())
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="self">self </span>/ <span class="kw-2">*</span>rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="self">Self</span>) {
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>= Wrapping(<span class="self">self</span>.<span class="number">0 </span>/ rhs)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) {
         <span class="kw-2">*</span><span class="self">self </span>/= <span class="kw-2">&amp;</span>rhs;
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">type </span>Output = UInt&lt;LIMBS&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Limb;
 
-    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
         <span class="kw-2">*</span><span class="self">self </span>% <span class="kw-2">*</span>rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">type </span>Output = UInt&lt;LIMBS&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Limb;
 
-    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
         <span class="self">self </span>% <span class="kw-2">*</span>rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">type </span>Output = UInt&lt;LIMBS&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Limb;
 
-    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
         <span class="kw-2">*</span><span class="self">self </span>% rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">type </span>Output = UInt&lt;LIMBS&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Limb;
 
-    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
-        <span class="kw">let </span>(r, <span class="kw">_</span>) = <span class="self">self</span>.ct_reduce(<span class="kw-2">&amp;</span>rhs);
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw">let </span>(<span class="kw">_</span>, r, <span class="kw">_</span>) = <span class="self">self</span>.ct_div_rem_limb(<span class="kw-2">*</span>rhs);
         r
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;) {
-        <span class="kw">let </span>(r, <span class="kw">_</span>) = <span class="self">self</span>.ct_reduce(<span class="kw-2">&amp;</span>rhs);
-        <span class="kw-2">*</span><span class="self">self </span>= r
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>= (<span class="kw-2">*</span><span class="self">self </span>% rhs).into();
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;NonZero&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>UInt&lt;LIMBS&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
-    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;UInt&lt;LIMBS&gt;&gt;) {
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) {
         <span class="kw-2">*</span><span class="self">self </span>%= <span class="kw-2">&amp;</span>rhs;
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Limb&gt;;
 
-    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
-        <span class="kw-2">*</span><span class="self">self </span>% <span class="kw-2">*</span>rhs
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
+        Wrapping(<span class="self">self</span>.<span class="number">0 </span>% rhs)
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Limb&gt;;
 
-    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
-        <span class="self">self </span>% <span class="kw-2">*</span>rhs
-    }
-}
-
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
-
-    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
         <span class="kw-2">*</span><span class="self">self </span>% rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">type </span>Output = Wrapping&lt;UInt&lt;LIMBS&gt;&gt;;
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Limb&gt;;
 
-    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
-        Wrapping(<span class="self">self</span>.<span class="number">0</span>.checked_rem(<span class="kw-2">&amp;</span>rhs.<span class="number">0</span>).unwrap())
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>% <span class="kw-2">*</span>rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;<span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt;) {
-        <span class="kw-2">*</span><span class="self">self </span>= Wrapping(<span class="self">self</span>.<span class="number">0</span>.checked_rem(<span class="kw-2">&amp;</span>rhs.<span class="number">0</span>).unwrap())
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Limb&gt;;
+
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="self">self </span>% <span class="kw-2">*</span>rhs
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign <span class="kw">for </span>Wrapping&lt;UInt&lt;LIMBS&gt;&gt; {
-    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="self">Self</span>) {
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;Limb&gt;) {
         <span class="kw-2">*</span><span class="self">self </span>%= <span class="kw-2">&amp;</span>rhs;
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Limb&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>= Wrapping((<span class="self">self</span>.<span class="number">0 </span>% rhs).into())
+    }
+}
+
+<span class="comment">//
+// Division by an Uint
+//
+
+</span><span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>/ <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="self">self </span>/ <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>/ rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw">let </span>(q, <span class="kw">_</span>) = <span class="self">self</span>.div_rem(<span class="kw-2">&amp;</span>rhs);
+        q
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>/= <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>/ rhs;
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        Wrapping(<span class="self">self</span>.<span class="number">0 </span>/ rhs)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>/ rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>/ <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Div&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>div(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="self">self </span>/ <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>= Wrapping(<span class="self">self</span>.<span class="number">0 </span>/ rhs);
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; DivAssign&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>/= <span class="kw-2">&amp;</span>rhs;
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
+
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>% <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
+
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="self">self </span>% <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
+
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>% rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">type </span>Output = Uint&lt;LIMBS&gt;;
+
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="self">Self</span>::rem(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">&amp;</span>rhs)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>%= <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Uint&lt;LIMBS&gt; {
+    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>% rhs;
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        Wrapping(<span class="self">self</span>.<span class="number">0 </span>% rhs)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>% rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span><span class="kw-2">&amp;</span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw-2">*</span><span class="self">self </span>% <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; Rem&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">type </span>Output = Wrapping&lt;Uint&lt;LIMBS&gt;&gt;;
+
+    <span class="kw">fn </span>rem(<span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) -&gt; <span class="self">Self</span>::Output {
+        <span class="self">self </span>% <span class="kw-2">*</span>rhs
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: NonZero&lt;Uint&lt;LIMBS&gt;&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>%= <span class="kw-2">&amp;</span>rhs;
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; RemAssign&lt;<span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;&gt; <span class="kw">for </span>Wrapping&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rhs: <span class="kw-2">&amp;</span>NonZero&lt;Uint&lt;LIMBS&gt;&gt;) {
+        <span class="kw-2">*</span><span class="self">self </span>= Wrapping(<span class="self">self</span>.<span class="number">0 </span>% rhs)
     }
 }
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use </span><span class="kw">crate</span>::limb::HI_BIT;
-    <span class="kw">use </span><span class="kw">crate</span>::Limb;
-    <span class="kw">use </span><span class="kw">crate</span>::U256;
+    <span class="kw">use crate</span>::{limb::HI_BIT, Limb, U256};
 
-    <span class="attr">#[cfg(feature = <span class="string">&quot;rand&quot;</span>)]
-    </span><span class="kw">use </span>{rand_chacha::ChaChaRng, rand_core::SeedableRng};
+    <span class="attr">#[cfg(feature = <span class="string">"rand"</span>)]
+    </span><span class="kw">use </span>{
+        <span class="kw">crate</span>::{CheckedMul, Random},
+        rand_chacha::ChaChaRng,
+        rand_core::RngCore,
+        rand_core::SeedableRng,
+    };
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>div_word() {
-        <span class="kw">for </span>(n, d, e) <span class="kw">in </span><span class="kw-2">&amp;</span>[
-            (<span class="number">200u64</span>, <span class="number">2u64</span>, <span class="number">100u64</span>),
-            (<span class="number">100u64</span>, <span class="number">25u64</span>, <span class="number">4u64</span>),
-            (<span class="number">100u64</span>, <span class="number">10u64</span>, <span class="number">10u64</span>),
-            (<span class="number">1024u64</span>, <span class="number">8u64</span>, <span class="number">128u64</span>),
+        <span class="kw">for </span>(n, d, e, ee) <span class="kw">in </span><span class="kw-2">&amp;</span>[
+            (<span class="number">200u64</span>, <span class="number">2u64</span>, <span class="number">100u64</span>, <span class="number">0</span>),
+            (<span class="number">100u64</span>, <span class="number">25u64</span>, <span class="number">4u64</span>, <span class="number">0</span>),
+            (<span class="number">100u64</span>, <span class="number">10u64</span>, <span class="number">10u64</span>, <span class="number">0</span>),
+            (<span class="number">1024u64</span>, <span class="number">8u64</span>, <span class="number">128u64</span>, <span class="number">0</span>),
+            (<span class="number">27u64</span>, <span class="number">13u64</span>, <span class="number">2u64</span>, <span class="number">1u64</span>),
+            (<span class="number">26u64</span>, <span class="number">13u64</span>, <span class="number">2u64</span>, <span class="number">0u64</span>),
+            (<span class="number">14u64</span>, <span class="number">13u64</span>, <span class="number">1u64</span>, <span class="number">1u64</span>),
+            (<span class="number">13u64</span>, <span class="number">13u64</span>, <span class="number">1u64</span>, <span class="number">0u64</span>),
+            (<span class="number">12u64</span>, <span class="number">13u64</span>, <span class="number">0u64</span>, <span class="number">12u64</span>),
+            (<span class="number">1u64</span>, <span class="number">13u64</span>, <span class="number">0u64</span>, <span class="number">1u64</span>),
         ] {
             <span class="kw">let </span>lhs = U256::from(<span class="kw-2">*</span>n);
             <span class="kw">let </span>rhs = U256::from(<span class="kw-2">*</span>d);
-            <span class="kw">let </span>expected = U256::from(<span class="kw-2">*</span>e);
             <span class="kw">let </span>(q, r, is_some) = lhs.ct_div_rem(<span class="kw-2">&amp;</span>rhs);
-            <span class="macro">assert_eq!</span>(is_some, <span class="number">1</span>);
-            <span class="macro">assert_eq!</span>(expected, q);
-            <span class="macro">assert_eq!</span>(U256::default(), r);
+            <span class="macro">assert!</span>(is_some.is_true_vartime());
+            <span class="macro">assert_eq!</span>(U256::from(<span class="kw-2">*</span>e), q);
+            <span class="macro">assert_eq!</span>(U256::from(<span class="kw-2">*</span>ee), r);
         }
     }
 
-    <span class="attr">#[cfg(feature = <span class="string">&quot;rand&quot;</span>)]
+    <span class="attr">#[cfg(feature = <span class="string">"rand"</span>)]
     #[test]
     </span><span class="kw">fn </span>div() {
         <span class="kw">let </span><span class="kw-2">mut </span>rng = ChaChaRng::from_seed([<span class="number">7u8</span>; <span class="number">32</span>]);
@@ -842,9 +1370,9 @@
             <span class="kw">let </span>num = U256::random(<span class="kw-2">&amp;mut </span>rng).shr_vartime(<span class="number">128</span>);
             <span class="kw">let </span>den = U256::random(<span class="kw-2">&amp;mut </span>rng).shr_vartime(<span class="number">128</span>);
             <span class="kw">let </span>n = num.checked_mul(<span class="kw-2">&amp;</span>den);
-            <span class="kw">if </span>n.is_some().unwrap_u8() == <span class="number">1 </span>{
+            <span class="kw">if </span>n.is_some().into() {
                 <span class="kw">let </span>(q, <span class="kw">_</span>, is_some) = n.unwrap().ct_div_rem(<span class="kw-2">&amp;</span>den);
-                <span class="macro">assert_eq!</span>(is_some, <span class="number">1</span>);
+                <span class="macro">assert!</span>(is_some.is_true_vartime());
                 <span class="macro">assert_eq!</span>(q, num);
             }
         }
@@ -854,52 +1382,69 @@
     </span><span class="kw">fn </span>div_max() {
         <span class="kw">let </span><span class="kw-2">mut </span>a = U256::ZERO;
         <span class="kw">let </span><span class="kw-2">mut </span>b = U256::ZERO;
-        b.limbs[b.limbs.len() - <span class="number">1</span>] = Limb(Inner::MAX);
+        b.limbs[b.limbs.len() - <span class="number">1</span>] = Limb(Word::MAX);
         <span class="kw">let </span>q = a.wrapping_div(<span class="kw-2">&amp;</span>b);
-        <span class="macro">assert_eq!</span>(q, UInt::ZERO);
-        a.limbs[a.limbs.len() - <span class="number">1</span>] = Limb(<span class="number">1 </span>&lt;&lt; HI_BIT - <span class="number">7</span>);
-        b.limbs[b.limbs.len() - <span class="number">1</span>] = Limb(<span class="number">0x82 </span>&lt;&lt; HI_BIT - <span class="number">7</span>);
+        <span class="macro">assert_eq!</span>(q, Uint::ZERO);
+        a.limbs[a.limbs.len() - <span class="number">1</span>] = Limb(<span class="number">1 </span>&lt;&lt; (HI_BIT - <span class="number">7</span>));
+        b.limbs[b.limbs.len() - <span class="number">1</span>] = Limb(<span class="number">0x82 </span>&lt;&lt; (HI_BIT - <span class="number">7</span>));
         <span class="kw">let </span>q = a.wrapping_div(<span class="kw-2">&amp;</span>b);
-        <span class="macro">assert_eq!</span>(q, UInt::ZERO);
+        <span class="macro">assert_eq!</span>(q, Uint::ZERO);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>div_zero() {
-        <span class="kw">let </span>(<span class="kw">_</span>, <span class="kw">_</span>, is_some) = U256::ONE.ct_div_rem(<span class="kw-2">&amp;</span>U256::ZERO);
-        <span class="macro">assert_eq!</span>(is_some, <span class="number">0</span>);
+        <span class="kw">let </span>(q, r, is_some) = U256::ONE.ct_div_rem(<span class="kw-2">&amp;</span>U256::ZERO);
+        <span class="macro">assert!</span>(!is_some.is_true_vartime());
+        <span class="macro">assert_eq!</span>(q, U256::ZERO);
+        <span class="macro">assert_eq!</span>(r, U256::ONE);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>div_one() {
         <span class="kw">let </span>(q, r, is_some) = U256::from(<span class="number">10u8</span>).ct_div_rem(<span class="kw-2">&amp;</span>U256::ONE);
-        <span class="macro">assert_eq!</span>(is_some, <span class="number">1</span>);
+        <span class="macro">assert!</span>(is_some.is_true_vartime());
         <span class="macro">assert_eq!</span>(q, U256::from(<span class="number">10u8</span>));
         <span class="macro">assert_eq!</span>(r, U256::ZERO);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>reduce_one() {
-        <span class="kw">let </span>(r, is_some) = U256::from(<span class="number">10u8</span>).ct_reduce(<span class="kw-2">&amp;</span>U256::ONE);
-        <span class="macro">assert_eq!</span>(is_some, <span class="number">1</span>);
+        <span class="kw">let </span>(r, is_some) = U256::from(<span class="number">10u8</span>).const_rem(<span class="kw-2">&amp;</span>U256::ONE);
+        <span class="macro">assert!</span>(is_some.is_true_vartime());
         <span class="macro">assert_eq!</span>(r, U256::ZERO);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>reduce_zero() {
-        <span class="kw">let </span>(<span class="kw">_</span>, is_some) = U256::from(<span class="number">10u8</span>).ct_reduce(<span class="kw-2">&amp;</span>U256::ZERO);
-        <span class="macro">assert_eq!</span>(is_some, <span class="number">0</span>);
+        <span class="kw">let </span>u = U256::from(<span class="number">10u8</span>);
+        <span class="kw">let </span>(r, is_some) = u.const_rem(<span class="kw-2">&amp;</span>U256::ZERO);
+        <span class="macro">assert!</span>(!is_some.is_true_vartime());
+        <span class="macro">assert_eq!</span>(r, u);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>reduce_tests() {
-        <span class="kw">let </span>(r, is_some) = U256::from(<span class="number">10u8</span>).ct_reduce(<span class="kw-2">&amp;</span>U256::from(<span class="number">2u8</span>));
-        <span class="macro">assert_eq!</span>(is_some, <span class="number">1</span>);
+        <span class="kw">let </span>(r, is_some) = U256::from(<span class="number">10u8</span>).const_rem(<span class="kw-2">&amp;</span>U256::from(<span class="number">2u8</span>));
+        <span class="macro">assert!</span>(is_some.is_true_vartime());
         <span class="macro">assert_eq!</span>(r, U256::ZERO);
-        <span class="kw">let </span>(r, is_some) = U256::from(<span class="number">10u8</span>).ct_reduce(<span class="kw-2">&amp;</span>U256::from(<span class="number">3u8</span>));
-        <span class="macro">assert_eq!</span>(is_some, <span class="number">1</span>);
+        <span class="kw">let </span>(r, is_some) = U256::from(<span class="number">10u8</span>).const_rem(<span class="kw-2">&amp;</span>U256::from(<span class="number">3u8</span>));
+        <span class="macro">assert!</span>(is_some.is_true_vartime());
         <span class="macro">assert_eq!</span>(r, U256::ONE);
-        <span class="kw">let </span>(r, is_some) = U256::from(<span class="number">10u8</span>).ct_reduce(<span class="kw-2">&amp;</span>U256::from(<span class="number">7u8</span>));
-        <span class="macro">assert_eq!</span>(is_some, <span class="number">1</span>);
+        <span class="kw">let </span>(r, is_some) = U256::from(<span class="number">10u8</span>).const_rem(<span class="kw-2">&amp;</span>U256::from(<span class="number">7u8</span>));
+        <span class="macro">assert!</span>(is_some.is_true_vartime());
+        <span class="macro">assert_eq!</span>(r, U256::from(<span class="number">3u8</span>));
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>reduce_tests_wide_zero_padded() {
+        <span class="kw">let </span>(r, is_some) = U256::const_rem_wide((U256::from(<span class="number">10u8</span>), U256::ZERO), <span class="kw-2">&amp;</span>U256::from(<span class="number">2u8</span>));
+        <span class="macro">assert!</span>(is_some.is_true_vartime());
+        <span class="macro">assert_eq!</span>(r, U256::ZERO);
+        <span class="kw">let </span>(r, is_some) = U256::const_rem_wide((U256::from(<span class="number">10u8</span>), U256::ZERO), <span class="kw-2">&amp;</span>U256::from(<span class="number">3u8</span>));
+        <span class="macro">assert!</span>(is_some.is_true_vartime());
+        <span class="macro">assert_eq!</span>(r, U256::ONE);
+        <span class="kw">let </span>(r, is_some) = U256::const_rem_wide((U256::from(<span class="number">10u8</span>), U256::ZERO), <span class="kw-2">&amp;</span>U256::from(<span class="number">7u8</span>));
+        <span class="macro">assert!</span>(is_some.is_true_vartime());
         <span class="macro">assert_eq!</span>(r, U256::from(<span class="number">3u8</span>));
     }
 
@@ -907,13 +1452,41 @@
     </span><span class="kw">fn </span>reduce_max() {
         <span class="kw">let </span><span class="kw-2">mut </span>a = U256::ZERO;
         <span class="kw">let </span><span class="kw-2">mut </span>b = U256::ZERO;
-        b.limbs[b.limbs.len() - <span class="number">1</span>] = Limb(Inner::MAX);
+        b.limbs[b.limbs.len() - <span class="number">1</span>] = Limb(Word::MAX);
         <span class="kw">let </span>r = a.wrapping_rem(<span class="kw-2">&amp;</span>b);
-        <span class="macro">assert_eq!</span>(r, UInt::ZERO);
-        a.limbs[a.limbs.len() - <span class="number">1</span>] = Limb(<span class="number">1 </span>&lt;&lt; HI_BIT - <span class="number">7</span>);
-        b.limbs[b.limbs.len() - <span class="number">1</span>] = Limb(<span class="number">0x82 </span>&lt;&lt; HI_BIT - <span class="number">7</span>);
+        <span class="macro">assert_eq!</span>(r, Uint::ZERO);
+        a.limbs[a.limbs.len() - <span class="number">1</span>] = Limb(<span class="number">1 </span>&lt;&lt; (HI_BIT - <span class="number">7</span>));
+        b.limbs[b.limbs.len() - <span class="number">1</span>] = Limb(<span class="number">0x82 </span>&lt;&lt; (HI_BIT - <span class="number">7</span>));
         <span class="kw">let </span>r = a.wrapping_rem(<span class="kw-2">&amp;</span>b);
-        <span class="macro">assert_eq!</span>(r, UInt::ZERO);
+        <span class="macro">assert_eq!</span>(r, a);
+    }
+
+    <span class="attr">#[cfg(feature = <span class="string">"rand"</span>)]
+    #[test]
+    </span><span class="kw">fn </span>rem2krand() {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = ChaChaRng::from_seed([<span class="number">7u8</span>; <span class="number">32</span>]);
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">25 </span>{
+            <span class="kw">let </span>num = U256::random(<span class="kw-2">&amp;mut </span>rng);
+            <span class="kw">let </span>k = (rng.next_u32() % <span class="number">256</span>) <span class="kw">as </span>usize;
+            <span class="kw">let </span>den = U256::ONE.shl_vartime(k);
+
+            <span class="kw">let </span>a = num.rem2k(k);
+            <span class="kw">let </span>e = num.wrapping_rem(<span class="kw-2">&amp;</span>den);
+            <span class="macro">assert_eq!</span>(a, e);
+        }
+    }
+
+    <span class="attr">#[allow(clippy::op_ref)]
+    #[test]
+    </span><span class="kw">fn </span>rem_trait() {
+        <span class="kw">let </span>a = U256::from(<span class="number">10u64</span>);
+        <span class="kw">let </span>b = NonZero::new(U256::from(<span class="number">3u64</span>)).unwrap();
+        <span class="kw">let </span>c = U256::from(<span class="number">1u64</span>);
+
+        <span class="macro">assert_eq!</span>(a % b, c);
+        <span class="macro">assert_eq!</span>(a % <span class="kw-2">&amp;</span>b, c);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>a % b, c);
+        <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>a % <span class="kw-2">&amp;</span>b, c);
     }
 }
 </code></pre></div></section></main></body></html>

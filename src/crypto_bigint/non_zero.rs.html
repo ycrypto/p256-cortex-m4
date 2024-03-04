@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crypto-bigint-0.2.11/src/non_zero.rs`."><title>non_zero.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="crypto_bigint" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../crypto_bigint/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crypto-bigint-0.5.5/src/non_zero.rs`."><title>non_zero.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="crypto_bigint" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../crypto_bigint/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="crypto_bigint"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -251,11 +252,149 @@
 <a href="#251" id="251">251</a>
 <a href="#252" id="252">252</a>
 <a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
+<a href="#370" id="370">370</a>
+<a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
+<a href="#379" id="379">379</a>
+<a href="#380" id="380">380</a>
+<a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Wrapper type for non-zero integers.
 
-</span><span class="attr">#[cfg(feature = <span class="string">&quot;rand&quot;</span>)]
-</span><span class="kw">use </span><span class="kw">crate</span>::Random;
-<span class="kw">use crate</span>::{Encoding, Integer, UInt};
+</span><span class="kw">use crate</span>::{CtChoice, Encoding, Integer, Limb, Uint, Zero};
 <span class="kw">use </span>core::{
     fmt,
     num::{NonZeroU128, NonZeroU16, NonZeroU32, NonZeroU64, NonZeroU8},
@@ -263,15 +402,48 @@
 };
 <span class="kw">use </span>subtle::{Choice, ConditionallySelectable, ConstantTimeEq, CtOption};
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;generic-array&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"generic-array"</span>)]
 </span><span class="kw">use crate</span>::{ArrayEncoding, ByteArray};
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;rand&quot;</span>)]
-</span><span class="kw">use </span>rand_core::{CryptoRng, RngCore};
+<span class="attr">#[cfg(feature = <span class="string">"rand_core"</span>)]
+</span><span class="kw">use </span>{<span class="kw">crate</span>::Random, rand_core::CryptoRngCore};
+
+<span class="attr">#[cfg(feature = <span class="string">"serde"</span>)]
+</span><span class="kw">use </span>serdect::serde::{
+    de::{Error, Unexpected},
+    Deserialize, Deserializer, Serialize, Serializer,
+};
 
 <span class="doccomment">/// Wrapper type for non-zero integers.
-</span><span class="attr">#[derive(Copy, Clone, Default, Eq, PartialEq, PartialOrd, Ord)]
-</span><span class="kw">pub struct </span>NonZero&lt;T: Integer&gt;(T);
+</span><span class="attr">#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, PartialOrd, Ord)]
+</span><span class="kw">pub struct </span>NonZero&lt;T: Zero&gt;(T);
+
+<span class="kw">impl </span>NonZero&lt;Limb&gt; {
+    <span class="doccomment">/// Creates a new non-zero limb in a const context.
+    /// The second return value is `FALSE` if `n` is zero, `TRUE` otherwise.
+    </span><span class="kw">pub const fn </span>const_new(n: Limb) -&gt; (<span class="self">Self</span>, CtChoice) {
+        (<span class="self">Self</span>(n), n.ct_is_nonzero())
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; NonZero&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="doccomment">/// Creates a new non-zero integer in a const context.
+    /// The second return value is `FALSE` if `n` is zero, `TRUE` otherwise.
+    </span><span class="kw">pub const fn </span>const_new(n: Uint&lt;LIMBS&gt;) -&gt; (<span class="self">Self</span>, CtChoice) {
+        (<span class="self">Self</span>(n), n.ct_is_nonzero())
+    }
+}
+
+<span class="kw">impl</span>&lt;T&gt; NonZero&lt;T&gt;
+<span class="kw">where
+    </span>T: Zero,
+{
+    <span class="doccomment">/// Create a new non-zero integer.
+    </span><span class="kw">pub fn </span>new(n: T) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>is_zero = n.is_zero();
+        CtOption::new(<span class="self">Self</span>(n), !is_zero)
+    }
+}
 
 <span class="kw">impl</span>&lt;T&gt; NonZero&lt;T&gt;
 <span class="kw">where
@@ -282,85 +454,42 @@
 
     <span class="doccomment">/// Maximum value this integer can express.
     </span><span class="kw">pub const </span>MAX: <span class="self">Self </span>= <span class="self">Self</span>(T::MAX);
+}
 
-    <span class="doccomment">/// Create a new non-zero integer.
-    </span><span class="kw">pub fn </span>new(n: T) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
-        CtOption::new(<span class="self">Self</span>(n), !n.is_zero())
-    }
-
+<span class="kw">impl</span>&lt;T&gt; NonZero&lt;T&gt;
+<span class="kw">where
+    </span>T: Encoding + Zero,
+{
     <span class="doccomment">/// Decode from big endian bytes.
-    </span><span class="kw">pub fn </span>from_be_bytes(bytes: T::Repr) -&gt; CtOption&lt;<span class="self">Self</span>&gt;
-    <span class="kw">where
-        </span>T: Encoding,
-    {
+    </span><span class="kw">pub fn </span>from_be_bytes(bytes: T::Repr) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
         <span class="self">Self</span>::new(T::from_be_bytes(bytes))
     }
 
     <span class="doccomment">/// Decode from little endian bytes.
-    </span><span class="kw">pub fn </span>from_le_bytes(bytes: T::Repr) -&gt; CtOption&lt;<span class="self">Self</span>&gt;
-    <span class="kw">where
-        </span>T: Encoding,
-    {
+    </span><span class="kw">pub fn </span>from_le_bytes(bytes: T::Repr) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
         <span class="self">Self</span>::new(T::from_le_bytes(bytes))
-    }
-
-    <span class="doccomment">/// Decode a non-zero integer from big endian bytes.
-    </span><span class="attr">#[cfg(feature = <span class="string">&quot;generic-array&quot;</span>)]
-    </span><span class="kw">pub fn </span>from_be_byte_array(bytes: ByteArray&lt;T&gt;) -&gt; CtOption&lt;<span class="self">Self</span>&gt;
-    <span class="kw">where
-        </span>T: ArrayEncoding,
-    {
-        <span class="self">Self</span>::new(T::from_be_byte_array(bytes))
-    }
-
-    <span class="doccomment">/// Decode a non-zero integer from big endian bytes.
-    </span><span class="attr">#[cfg(feature = <span class="string">&quot;generic-array&quot;</span>)]
-    </span><span class="kw">pub fn </span>from_le_byte_array(bytes: ByteArray&lt;T&gt;) -&gt; CtOption&lt;<span class="self">Self</span>&gt;
-    <span class="kw">where
-        </span>T: ArrayEncoding,
-    {
-        <span class="self">Self</span>::new(T::from_be_byte_array(bytes))
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; NonZero&lt;UInt&lt;LIMBS&gt;&gt;
+<span class="attr">#[cfg(feature = <span class="string">"generic-array"</span>)]
+</span><span class="kw">impl</span>&lt;T&gt; NonZero&lt;T&gt;
 <span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
+    </span>T: ArrayEncoding + Zero,
 {
-    <span class="doccomment">/// Create a [`NonZero&lt;UInt&gt;`] from a [`NonZeroU8`] (const-friendly)
-    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU8&gt;` when stable
-    </span><span class="kw">pub const fn </span>from_u8(n: NonZeroU8) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(UInt::from_u8(n.get()))
+    <span class="doccomment">/// Decode a non-zero integer from big endian bytes.
+    </span><span class="kw">pub fn </span>from_be_byte_array(bytes: ByteArray&lt;T&gt;) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
+        <span class="self">Self</span>::new(T::from_be_byte_array(bytes))
     }
 
-    <span class="doccomment">/// Create a [`NonZero&lt;UInt&gt;`] from a [`NonZeroU16`] (const-friendly)
-    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU16&gt;` when stable
-    </span><span class="kw">pub const fn </span>from_u16(n: NonZeroU16) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(UInt::from_u16(n.get()))
-    }
-
-    <span class="doccomment">/// Create a [`NonZero&lt;UInt&gt;`] from a [`NonZeroU32`] (const-friendly)
-    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU32&gt;` when stable
-    </span><span class="kw">pub const fn </span>from_u32(n: NonZeroU32) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(UInt::from_u32(n.get()))
-    }
-
-    <span class="doccomment">/// Create a [`NonZero&lt;UInt&gt;`] from a [`NonZeroU64`] (const-friendly)
-    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU64&gt;` when stable
-    </span><span class="kw">pub const fn </span>from_u64(n: NonZeroU64) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(UInt::from_u64(n.get()))
-    }
-
-    <span class="doccomment">/// Create a [`NonZero&lt;UInt&gt;`] from a [`NonZeroU128`] (const-friendly)
-    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU128&gt;` when stable
-    </span><span class="kw">pub const fn </span>from_u128(n: NonZeroU128) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(UInt::from_u128(n.get()))
+    <span class="doccomment">/// Decode a non-zero integer from big endian bytes.
+    </span><span class="kw">pub fn </span>from_le_byte_array(bytes: ByteArray&lt;T&gt;) -&gt; CtOption&lt;<span class="self">Self</span>&gt; {
+        <span class="self">Self</span>::new(T::from_be_byte_array(bytes))
     }
 }
 
 <span class="kw">impl</span>&lt;T&gt; AsRef&lt;T&gt; <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer,
+    </span>T: Zero,
 {
     <span class="kw">fn </span>as_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>T {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
@@ -369,7 +498,7 @@
 
 <span class="kw">impl</span>&lt;T&gt; ConditionallySelectable <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer,
+    </span>T: ConditionallySelectable + Zero,
 {
     <span class="kw">fn </span>conditional_select(a: <span class="kw-2">&amp;</span><span class="self">Self</span>, b: <span class="kw-2">&amp;</span><span class="self">Self</span>, choice: Choice) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>(T::conditional_select(<span class="kw-2">&amp;</span>a.<span class="number">0</span>, <span class="kw-2">&amp;</span>b.<span class="number">0</span>, choice))
@@ -378,7 +507,7 @@
 
 <span class="kw">impl</span>&lt;T&gt; ConstantTimeEq <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer,
+    </span>T: Zero,
 {
     <span class="kw">fn </span>ct_eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; Choice {
         <span class="self">self</span>.<span class="number">0</span>.ct_eq(<span class="kw-2">&amp;</span>other.<span class="number">0</span>)
@@ -387,7 +516,7 @@
 
 <span class="kw">impl</span>&lt;T&gt; Deref <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer,
+    </span>T: Zero,
 {
     <span class="kw">type </span>Target = T;
 
@@ -396,17 +525,16 @@
     </span>}
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;rand&quot;</span>)]
-#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;rand&quot;</span>)))]
+<span class="attr">#[cfg(feature = <span class="string">"rand_core"</span>)]
 </span><span class="kw">impl</span>&lt;T&gt; Random <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer + Random,
+    </span>T: Random + Zero,
 {
     <span class="doccomment">/// Generate a random `NonZero&lt;T&gt;`.
-    </span><span class="kw">fn </span>random(<span class="kw-2">mut </span>rng: <span class="kw">impl </span>CryptoRng + RngCore) -&gt; <span class="self">Self </span>{
+    </span><span class="kw">fn </span>random(<span class="kw-2">mut </span>rng: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>CryptoRngCore) -&gt; <span class="self">Self </span>{
         <span class="comment">// Use rejection sampling to eliminate zero values.
-        // While this method isn&#39;t constant-time, the attacker shouldn&#39;t learn
-        // anything about unrelated outputs so long as `rng` is a secure `CryptoRng`.
+        // While this method isn't constant-time, the attacker shouldn't learn
+        // anything about unrelated outputs so long as `rng` is a CSRNG.
         </span><span class="kw">loop </span>{
             <span class="kw">if let </span><span class="prelude-val">Some</span>(result) = <span class="self">Self</span>::new(T::random(<span class="kw-2">&amp;mut </span>rng)).into() {
                 <span class="kw">break </span>result;
@@ -417,91 +545,244 @@
 
 <span class="kw">impl</span>&lt;T&gt; fmt::Display <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer + fmt::Display,
+    </span>T: fmt::Display + Zero,
 {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         fmt::Display::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
     }
 }
 
 <span class="kw">impl</span>&lt;T&gt; fmt::Binary <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer + fmt::Binary,
+    </span>T: fmt::Binary + Zero,
 {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         fmt::Binary::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
     }
 }
 
 <span class="kw">impl</span>&lt;T&gt; fmt::Octal <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer + fmt::Octal,
+    </span>T: fmt::Octal + Zero,
 {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         fmt::Octal::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
     }
 }
 
 <span class="kw">impl</span>&lt;T&gt; fmt::LowerHex <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer + fmt::LowerHex,
+    </span>T: fmt::LowerHex + Zero,
 {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         fmt::LowerHex::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
     }
 }
 
 <span class="kw">impl</span>&lt;T&gt; fmt::UpperHex <span class="kw">for </span>NonZero&lt;T&gt;
 <span class="kw">where
-    </span>T: Integer + fmt::UpperHex,
+    </span>T: fmt::UpperHex + Zero,
 {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         fmt::UpperHex::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU8&gt; <span class="kw">for </span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
+<span class="kw">impl </span>NonZero&lt;Limb&gt; {
+    <span class="doccomment">/// Create a [`NonZero&lt;Limb&gt;`] from a [`NonZeroU8`] (const-friendly)
+    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU8&gt;` when stable
+    </span><span class="kw">pub const fn </span>from_u8(n: NonZeroU8) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(Limb::from_u8(n.get()))
+    }
+
+    <span class="doccomment">/// Create a [`NonZero&lt;Limb&gt;`] from a [`NonZeroU16`] (const-friendly)
+    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU16&gt;` when stable
+    </span><span class="kw">pub const fn </span>from_u16(n: NonZeroU16) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(Limb::from_u16(n.get()))
+    }
+
+    <span class="doccomment">/// Create a [`NonZero&lt;Limb&gt;`] from a [`NonZeroU32`] (const-friendly)
+    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU32&gt;` when stable
+    </span><span class="kw">pub const fn </span>from_u32(n: NonZeroU32) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(Limb::from_u32(n.get()))
+    }
+
+    <span class="doccomment">/// Create a [`NonZero&lt;Limb&gt;`] from a [`NonZeroU64`] (const-friendly)
+    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU64&gt;` when stable
+    </span><span class="attr">#[cfg(target_pointer_width = <span class="string">"64"</span>)]
+    </span><span class="kw">pub const fn </span>from_u64(n: NonZeroU64) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(Limb::from_u64(n.get()))
+    }
+}
+
+<span class="kw">impl </span>From&lt;NonZeroU8&gt; <span class="kw">for </span>NonZero&lt;Limb&gt; {
     <span class="kw">fn </span>from(integer: NonZeroU8) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::from_u8(integer)
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU16&gt; <span class="kw">for </span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
+<span class="kw">impl </span>From&lt;NonZeroU16&gt; <span class="kw">for </span>NonZero&lt;Limb&gt; {
     <span class="kw">fn </span>from(integer: NonZeroU16) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::from_u16(integer)
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU32&gt; <span class="kw">for </span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
+<span class="kw">impl </span>From&lt;NonZeroU32&gt; <span class="kw">for </span>NonZero&lt;Limb&gt; {
     <span class="kw">fn </span>from(integer: NonZeroU32) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::from_u32(integer)
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU64&gt; <span class="kw">for </span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
+<span class="attr">#[cfg(target_pointer_width = <span class="string">"64"</span>)]
+</span><span class="kw">impl </span>From&lt;NonZeroU64&gt; <span class="kw">for </span>NonZero&lt;Limb&gt; {
     <span class="kw">fn </span>from(integer: NonZeroU64) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::from_u64(integer)
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU128&gt; <span class="kw">for </span>NonZero&lt;UInt&lt;LIMBS&gt;&gt;
-<span class="kw">where
-    </span>UInt&lt;LIMBS&gt;: Integer,
-{
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; NonZero&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="doccomment">/// Create a [`NonZero&lt;Uint&gt;`] from a [`Uint`] (const-friendly)
+    </span><span class="kw">pub const fn </span>from_uint(n: Uint&lt;LIMBS&gt;) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="number">0</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>found_non_zero = <span class="bool-val">false</span>;
+        <span class="kw">while </span>i &lt; LIMBS {
+            <span class="kw">if </span>n.as_limbs()[i].<span class="number">0 </span>!= <span class="number">0 </span>{
+                found_non_zero = <span class="bool-val">true</span>;
+            }
+            i += <span class="number">1</span>;
+        }
+        <span class="macro">assert!</span>(found_non_zero, <span class="string">"found zero"</span>);
+        <span class="self">Self</span>(n)
+    }
+
+    <span class="doccomment">/// Create a [`NonZero&lt;Uint&gt;`] from a [`NonZeroU8`] (const-friendly)
+    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU8&gt;` when stable
+    </span><span class="kw">pub const fn </span>from_u8(n: NonZeroU8) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(Uint::from_u8(n.get()))
+    }
+
+    <span class="doccomment">/// Create a [`NonZero&lt;Uint&gt;`] from a [`NonZeroU16`] (const-friendly)
+    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU16&gt;` when stable
+    </span><span class="kw">pub const fn </span>from_u16(n: NonZeroU16) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(Uint::from_u16(n.get()))
+    }
+
+    <span class="doccomment">/// Create a [`NonZero&lt;Uint&gt;`] from a [`NonZeroU32`] (const-friendly)
+    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU32&gt;` when stable
+    </span><span class="kw">pub const fn </span>from_u32(n: NonZeroU32) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(Uint::from_u32(n.get()))
+    }
+
+    <span class="doccomment">/// Create a [`NonZero&lt;Uint&gt;`] from a [`NonZeroU64`] (const-friendly)
+    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU64&gt;` when stable
+    </span><span class="kw">pub const fn </span>from_u64(n: NonZeroU64) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(Uint::from_u64(n.get()))
+    }
+
+    <span class="doccomment">/// Create a [`NonZero&lt;Uint&gt;`] from a [`NonZeroU128`] (const-friendly)
+    </span><span class="comment">// TODO(tarcieri): replace with `const impl From&lt;NonZeroU128&gt;` when stable
+    </span><span class="kw">pub const fn </span>from_u128(n: NonZeroU128) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(Uint::from_u128(n.get()))
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU8&gt; <span class="kw">for </span>NonZero&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>from(integer: NonZeroU8) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from_u8(integer)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU16&gt; <span class="kw">for </span>NonZero&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>from(integer: NonZeroU16) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from_u16(integer)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU32&gt; <span class="kw">for </span>NonZero&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>from(integer: NonZeroU32) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from_u32(integer)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU64&gt; <span class="kw">for </span>NonZero&lt;Uint&lt;LIMBS&gt;&gt; {
+    <span class="kw">fn </span>from(integer: NonZeroU64) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from_u64(integer)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="kw">const </span>LIMBS: usize&gt; From&lt;NonZeroU128&gt; <span class="kw">for </span>NonZero&lt;Uint&lt;LIMBS&gt;&gt; {
     <span class="kw">fn </span>from(integer: NonZeroU128) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::from_u128(integer)
+    }
+}
+
+<span class="attr">#[cfg(feature = <span class="string">"serde"</span>)]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'de</span>, T: Deserialize&lt;<span class="lifetime">'de</span>&gt; + Zero&gt; Deserialize&lt;<span class="lifetime">'de</span>&gt; <span class="kw">for </span>NonZero&lt;T&gt; {
+    <span class="kw">fn </span>deserialize&lt;D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt;
+    <span class="kw">where
+        </span>D: Deserializer&lt;<span class="lifetime">'de</span>&gt;,
+    {
+        <span class="kw">let </span>value: T = T::deserialize(deserializer)<span class="question-mark">?</span>;
+
+        <span class="kw">if </span>bool::from(value.is_zero()) {
+            <span class="prelude-val">Err</span>(D::Error::invalid_value(
+                Unexpected::Other(<span class="string">"zero"</span>),
+                <span class="kw-2">&amp;</span><span class="string">"a non-zero value"</span>,
+            ))
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Ok</span>(<span class="self">Self</span>(value))
+        }
+    }
+}
+
+<span class="attr">#[cfg(feature = <span class="string">"serde"</span>)]
+</span><span class="kw">impl</span>&lt;T: Serialize + Zero&gt; Serialize <span class="kw">for </span>NonZero&lt;T&gt; {
+    <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
+    <span class="kw">where
+        </span>S: Serializer,
+    {
+        <span class="self">self</span>.<span class="number">0</span>.serialize(serializer)
+    }
+}
+
+<span class="attr">#[cfg(all(test, feature = <span class="string">"serde"</span>))]
+#[allow(clippy::unwrap_used)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use crate</span>::{NonZero, U64};
+    <span class="kw">use </span>bincode::ErrorKind;
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>serde() {
+        <span class="kw">let </span>test =
+            <span class="prelude-ty">Option</span>::&lt;NonZero&lt;U64&gt;&gt;::from(NonZero::new(U64::from_u64(<span class="number">0x0011223344556677</span>))).unwrap();
+
+        <span class="kw">let </span>serialized = bincode::serialize(<span class="kw-2">&amp;</span>test).unwrap();
+        <span class="kw">let </span>deserialized: NonZero&lt;U64&gt; = bincode::deserialize(<span class="kw-2">&amp;</span>serialized).unwrap();
+
+        <span class="macro">assert_eq!</span>(test, deserialized);
+
+        <span class="kw">let </span>serialized = bincode::serialize(<span class="kw-2">&amp;</span>U64::ZERO).unwrap();
+        <span class="macro">assert!</span>(<span class="macro">matches!</span>(
+            <span class="kw-2">*</span>bincode::deserialize::&lt;NonZero&lt;U64&gt;&gt;(<span class="kw-2">&amp;</span>serialized).unwrap_err(),
+            ErrorKind::Custom(message) <span class="kw">if </span>message == <span class="string">"invalid value: zero, expected a non-zero value"
+        </span>));
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>serde_owned() {
+        <span class="kw">let </span>test =
+            <span class="prelude-ty">Option</span>::&lt;NonZero&lt;U64&gt;&gt;::from(NonZero::new(U64::from_u64(<span class="number">0x0011223344556677</span>))).unwrap();
+
+        <span class="kw">let </span>serialized = bincode::serialize(<span class="kw-2">&amp;</span>test).unwrap();
+        <span class="kw">let </span>deserialized: NonZero&lt;U64&gt; = bincode::deserialize_from(serialized.as_slice()).unwrap();
+
+        <span class="macro">assert_eq!</span>(test, deserialized);
+
+        <span class="kw">let </span>serialized = bincode::serialize(<span class="kw-2">&amp;</span>U64::ZERO).unwrap();
+        <span class="macro">assert!</span>(<span class="macro">matches!</span>(
+            <span class="kw-2">*</span>bincode::deserialize_from::&lt;<span class="kw">_</span>, NonZero&lt;U64&gt;&gt;(serialized.as_slice()).unwrap_err(),
+            ErrorKind::Custom(message) <span class="kw">if </span>message == <span class="string">"invalid value: zero, expected a non-zero value"
+        </span>));
     }
 }
 </code></pre></div></section></main></body></html>

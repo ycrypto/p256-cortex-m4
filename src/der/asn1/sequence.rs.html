@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/der-0.4.5/src/asn1/sequence.rs`."><title>sequence.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="der" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../der/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/der-0.7.8/src/asn1/sequence.rs`."><title>sequence.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="der" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../der/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="der"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -51,117 +52,57 @@
 <a href="#51" id="51">51</a>
 <a href="#52" id="52">52</a>
 <a href="#53" id="53">53</a>
-<a href="#54" id="54">54</a>
-<a href="#55" id="55">55</a>
-<a href="#56" id="56">56</a>
-<a href="#57" id="57">57</a>
-<a href="#58" id="58">58</a>
-<a href="#59" id="59">59</a>
-<a href="#60" id="60">60</a>
-<a href="#61" id="61">61</a>
-<a href="#62" id="62">62</a>
-<a href="#63" id="63">63</a>
-<a href="#64" id="64">64</a>
-<a href="#65" id="65">65</a>
-<a href="#66" id="66">66</a>
-<a href="#67" id="67">67</a>
-<a href="#68" id="68">68</a>
-<a href="#69" id="69">69</a>
-<a href="#70" id="70">70</a>
-<a href="#71" id="71">71</a>
-<a href="#72" id="72">72</a>
-<a href="#73" id="73">73</a>
-<a href="#74" id="74">74</a>
-<a href="#75" id="75">75</a>
-<a href="#76" id="76">76</a>
-<a href="#77" id="77">77</a>
-<a href="#78" id="78">78</a>
-<a href="#79" id="79">79</a>
-<a href="#80" id="80">80</a>
-<a href="#81" id="81">81</a>
-<a href="#82" id="82">82</a>
-<a href="#83" id="83">83</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! ASN.1 `SEQUENCE` support.
+</pre></div><pre class="rust"><code><span class="doccomment">//! The [`Sequence`] trait simplifies writing decoders/encoders which map ASN.1
+//! `SEQUENCE`s to Rust structs.
 
-</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">mod </span>iter;
-
-<span class="kw">use </span><span class="self">self</span>::iter::SequenceIter;
-<span class="kw">use crate</span>::{
-    asn1::Any, ByteSlice, Decodable, Decoder, Encodable, Encoder, Error, ErrorKind, Length, <span class="prelude-ty">Result</span>,
-    Tag, Tagged,
+</span><span class="kw">use crate</span>::{
+    BytesRef, DecodeValue, EncodeValue, FixedTag, Header, Length, Reader, <span class="prelude-ty">Result</span>, Tag, Writer,
 };
-<span class="kw">use </span>core::convert::TryFrom;
 
-<span class="doccomment">/// ASN.1 `SEQUENCE` type.
-</span><span class="attr">#[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
-</span><span class="kw">pub struct </span>Sequence&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="doccomment">/// Inner value
-    </span>inner: ByteSlice&lt;<span class="lifetime">&#39;a</span>&gt;,
-}
+<span class="attr">#[cfg(feature = <span class="string">"alloc"</span>)]
+</span><span class="kw">use </span>alloc::boxed::Box;
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Sequence&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="doccomment">/// Create a new [`Sequence`] from a slice.
-    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(slice: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-        ByteSlice::new(slice)
-            .map(|inner| <span class="self">Self </span>{ inner })
-            .map_err(|<span class="kw">_</span>| ErrorKind::Length { tag: <span class="self">Self</span>::TAG }.into())
-    }
+<span class="doccomment">/// Marker trait for ASN.1 `SEQUENCE`s.
+///
+/// This is mainly used for custom derive.
+</span><span class="kw">pub trait </span>Sequence&lt;<span class="lifetime">'a</span>&gt;: DecodeValue&lt;<span class="lifetime">'a</span>&gt; + EncodeValue {}
 
-    <span class="doccomment">/// Borrow the inner byte sequence.
-    </span><span class="kw">pub fn </span>as_bytes(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>[u8] {
-        <span class="self">self</span>.inner.as_bytes()
-    }
-
-    <span class="doccomment">/// Decode values nested within a sequence, creating a new [`Decoder`] for
-    /// the data contained in the sequence&#39;s body and passing it to the provided
-    /// [`FnOnce`].
-    </span><span class="kw">pub fn </span>decode_nested&lt;F, T&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, f: F) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;
-    <span class="kw">where
-        </span>F: FnOnce(<span class="kw-2">&amp;mut </span>Decoder&lt;<span class="lifetime">&#39;a</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;,
-    {
-        <span class="kw">let </span><span class="kw-2">mut </span>seq_decoder = Decoder::new(<span class="self">self</span>.as_bytes());
-        <span class="kw">let </span>result = f(<span class="kw-2">&amp;mut </span>seq_decoder)<span class="question-mark">?</span>;
-        seq_decoder.finish(result)
-    }
-
-    <span class="doccomment">/// Iterate over the values in a heterogenously typed sequence.
-    </span><span class="kw">pub fn </span>iter&lt;T: Decodable&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; SequenceIter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
-        SequenceIter::new(Decoder::new(<span class="self">self</span>.as_bytes()))
-    }
-}
-
-<span class="kw">impl </span>AsRef&lt;[u8]&gt; <span class="kw">for </span>Sequence&lt;<span class="lifetime">&#39;_</span>&gt; {
-    <span class="kw">fn </span>as_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[u8] {
-        <span class="self">self</span>.as_bytes()
-    }
-}
-
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; TryFrom&lt;Any&lt;<span class="lifetime">&#39;a</span>&gt;&gt; <span class="kw">for </span>Sequence&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="kw">type </span>Error = Error;
-
-    <span class="kw">fn </span>try_from(any: Any&lt;<span class="lifetime">&#39;a</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-        any.tag().assert_eq(Tag::Sequence)<span class="question-mark">?</span>;
-        <span class="self">Self</span>::new(any.as_bytes())
-    }
-}
-
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; From&lt;Sequence&lt;<span class="lifetime">&#39;a</span>&gt;&gt; <span class="kw">for </span>Any&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="kw">fn </span>from(seq: Sequence&lt;<span class="lifetime">&#39;a</span>&gt;) -&gt; Any&lt;<span class="lifetime">&#39;a</span>&gt; {
-        Any::from_tag_and_value(Tag::Sequence, seq.inner)
-    }
-}
-
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Encodable <span class="kw">for </span>Sequence&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="kw">fn </span>encoded_len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Length&gt; {
-        Any::from(<span class="kw-2">*</span><span class="self">self</span>).encoded_len()
-    }
-
-    <span class="kw">fn </span>encode(<span class="kw-2">&amp;</span><span class="self">self</span>, encoder: <span class="kw-2">&amp;mut </span>Encoder&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-        Any::from(<span class="kw-2">*</span><span class="self">self</span>).encode(encoder)
-    }
-}
-
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Tagged <span class="kw">for </span>Sequence&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, S&gt; FixedTag <span class="kw">for </span>S
+<span class="kw">where
+    </span>S: Sequence&lt;<span class="lifetime">'a</span>&gt;,
+{
     <span class="kw">const </span>TAG: Tag = Tag::Sequence;
 }
+
+<span class="attr">#[cfg(feature = <span class="string">"alloc"</span>)]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T&gt; Sequence&lt;<span class="lifetime">'a</span>&gt; <span class="kw">for </span>Box&lt;T&gt; <span class="kw">where </span>T: Sequence&lt;<span class="lifetime">'a</span>&gt; {}
+
+<span class="doccomment">/// The [`SequenceRef`] type provides raw access to the octets which comprise a
+/// DER-encoded `SEQUENCE`.
+///
+/// This is a zero-copy reference type which borrows from the input data.
+</span><span class="kw">pub struct </span>SequenceRef&lt;<span class="lifetime">'a</span>&gt; {
+    <span class="doccomment">/// Body of the `SEQUENCE`.
+    </span>body: BytesRef&lt;<span class="lifetime">'a</span>&gt;,
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; DecodeValue&lt;<span class="lifetime">'a</span>&gt; <span class="kw">for </span>SequenceRef&lt;<span class="lifetime">'a</span>&gt; {
+    <span class="kw">fn </span>decode_value&lt;R: Reader&lt;<span class="lifetime">'a</span>&gt;&gt;(reader: <span class="kw-2">&amp;mut </span>R, header: Header) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            body: BytesRef::decode_value(reader, header)<span class="question-mark">?</span>,
+        })
+    }
+}
+
+<span class="kw">impl </span>EncodeValue <span class="kw">for </span>SequenceRef&lt;<span class="lifetime">'_</span>&gt; {
+    <span class="kw">fn </span>value_len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Length&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>.body.len())
+    }
+
+    <span class="kw">fn </span>encode_value(<span class="kw-2">&amp;</span><span class="self">self</span>, writer: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>Writer) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.body.encode_value(writer)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; Sequence&lt;<span class="lifetime">'a</span>&gt; <span class="kw">for </span>SequenceRef&lt;<span class="lifetime">'a</span>&gt; {}
 </code></pre></div></section></main></body></html>

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["Add","AddAssign","Invert","Mul","Neg","Sub","SubAssign"]};
+window.SIDEBAR_ITEMS = {"trait":["Add","AddAssign","BatchInvert","Invert","LinearCombination","LinearCombinationExt","Mul","MulByGenerator","Neg","Reduce","ReduceNonZero","Shr","ShrAssign","Sub","SubAssign"]};

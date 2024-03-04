@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["adc","mac_with_carry","sbb"],"struct":["BatchInverter"],"trait":["Field","PrimeField"]};
+window.SIDEBAR_ITEMS = {"mod":["helpers"],"struct":["BatchInverter"],"trait":["Field","FromUniformBytes","PrimeField","WithSmallOrderMulGroup"]};

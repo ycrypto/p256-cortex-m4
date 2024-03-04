@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["Curve","DecompactPoint","DecompressPoint","PointCompaction","PointCompression"]};
+window.SIDEBAR_ITEMS = {"fn":["add","add_mixed","double"],"type":["AffinePoint","ProjectivePoint"]};

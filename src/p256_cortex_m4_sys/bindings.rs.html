@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/p256-cortex-m4-sys-0.1.0/src/bindings.rs`."><title>bindings.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="p256_cortex_m4_sys" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../p256_cortex_m4_sys/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/p256-cortex-m4-sys-0.1.0/src/bindings.rs`."><title>bindings.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="p256_cortex_m4_sys" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -656,20 +657,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;__fsid_t&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(__fsid_t))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(__fsid_t))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;__fsid_t&gt;(),
         <span class="number">4usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(__fsid_t))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(__fsid_t))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;__fsid_t&gt;())).__val <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(__fsid_t),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(__val)
         )
     );
@@ -733,12 +734,12 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;max_align_t&gt;(),
         <span class="number">16usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(max_align_t))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(max_align_t))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;max_align_t&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(max_align_t))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(max_align_t))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{
@@ -746,9 +747,9 @@
         },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(max_align_t),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(__clang_max_align_nonce1)
         )
     );
@@ -758,27 +759,27 @@
         },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(max_align_t),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(__clang_max_align_nonce2)
         )
     );
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Converts endianness by reversing the input value.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; The output and input pointers may refer to the same location and have no alignment requirements.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Converts endianness by reversing the input value."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" The output and input pointers may refer to the same location and have no alignment requirements."</span>]
     </span><span class="kw">pub fn </span>p256_convert_endianness(
         output: <span class="kw-2">*mut </span>cty::c_void,
         input: <span class="kw-2">*const </span>cty::c_void,
         byte_len: size_t,
     );
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Verifies an ECDSA signature.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; Returns true if the signature is valid for the given input, otherwise false.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Verifies an ECDSA signature."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" Returns true if the signature is valid for the given input, otherwise false."</span>]
     </span><span class="kw">pub fn </span>p256_verify(
         public_key_x: <span class="kw-2">*const </span>u32,
         public_key_y: <span class="kw-2">*const </span>u32,
@@ -788,20 +789,20 @@
         s: <span class="kw-2">*const </span>u32,
     ) -&gt; bool;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Creates an ECDSA signature.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; The parameter \&quot;k\&quot; shall consist of a 256-bit random integer value. This random value MUST be generated from&quot;</span>]
-    #[doc = <span class="string">&quot; a cryptographically secure random number generator, and MUST be unique for every pair of message hash and&quot;</span>]
-    #[doc = <span class="string">&quot; private key.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; With a small probability (~ 2^-32), this function will fail and return false for the given \&quot;k\&quot; and this&quot;</span>]
-    #[doc = <span class="string">&quot; function MUST in that case be called again with a new random \&quot;k\&quot;, until true is returned. This is in line&quot;</span>]
-    #[doc = <span class="string">&quot; with the ECDSA standard.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; As an alternative to using a random \&quot;k\&quot;, \&quot;k\&quot; might be derived deterministically from the input, using a&quot;</span>]
-    #[doc = <span class="string">&quot; sophisticated hash construction such as RFC 6979, or e.g. by hashing the private key, message hash and a&quot;</span>]
-    #[doc = <span class="string">&quot; retry counter, using a secure hash function such as SHA-256.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Creates an ECDSA signature."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" The parameter \"k\" shall consist of a 256-bit random integer value. This random value MUST be generated from"</span>]
+    #[doc = <span class="string">" a cryptographically secure random number generator, and MUST be unique for every pair of message hash and"</span>]
+    #[doc = <span class="string">" private key."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" With a small probability (~ 2^-32), this function will fail and return false for the given \"k\" and this"</span>]
+    #[doc = <span class="string">" function MUST in that case be called again with a new random \"k\", until true is returned. This is in line"</span>]
+    #[doc = <span class="string">" with the ECDSA standard."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" As an alternative to using a random \"k\", \"k\" might be derived deterministically from the input, using a"</span>]
+    #[doc = <span class="string">" sophisticated hash construction such as RFC 6979, or e.g. by hashing the private key, message hash and a"</span>]
+    #[doc = <span class="string">" retry counter, using a secure hash function such as SHA-256."</span>]
     </span><span class="kw">pub fn </span>p256_sign(
         r: <span class="kw-2">*mut </span>u32,
         s: <span class="kw-2">*mut </span>u32,
@@ -811,9 +812,9 @@
         k: <span class="kw-2">*const </span>u32,
     ) -&gt; bool;
 }
-<span class="attr">#[doc = <span class="string">&quot; Sign precomputation state.&quot;</span>]
-#[doc = <span class="string">&quot;&quot;</span>]
-#[doc = <span class="string">&quot; The content shall be treated as opaque to the API user and shall not be inspected or modified.&quot;</span>]
+<span class="attr">#[doc = <span class="string">" Sign precomputation state."</span>]
+#[doc = <span class="string">""</span>]
+#[doc = <span class="string">" The content shall be treated as opaque to the API user and shall not be inspected or modified."</span>]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 </span><span class="kw">pub struct </span>SignPrecomp {
@@ -825,20 +826,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;SignPrecomp&gt;(),
         <span class="number">64usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(SignPrecomp))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(SignPrecomp))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;SignPrecomp&gt;(),
         <span class="number">4usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(SignPrecomp))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(SignPrecomp))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;SignPrecomp&gt;())).r <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(SignPrecomp),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(r)
         )
     );
@@ -846,52 +847,52 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;SignPrecomp&gt;())).k_inv <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">32usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(SignPrecomp),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(k_inv)
         )
     );
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Creates an ECDSA signature, using a two-step procedure.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; This function performs the first of two steps, and accounts for 99% of the time spent for generating an&quot;</span>]
-    #[doc = <span class="string">&quot; ECDSA signature.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; By splitting up into two steps, most of the work could be spent before deciding what message to sign, or&quot;</span>]
-    #[doc = <span class="string">&quot; which private key to use.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; The parameter \&quot;k\&quot; shall consist of a 256-bit random integer value. This random value MUST be generated from&quot;</span>]
-    #[doc = <span class="string">&quot; a cryptographically secure random number generator, and MUST be unique for every pair of message hash and&quot;</span>]
-    #[doc = <span class="string">&quot; private key.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; With a small probability (~ 2^-32), this function will fail and return false for the given \&quot;k\&quot; and this&quot;</span>]
-    #[doc = <span class="string">&quot; function MUST in that case be called again with a new random \&quot;k\&quot;, until true is returned. This is in line&quot;</span>]
-    #[doc = <span class="string">&quot; with the ECDSA standard.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; As an alternative to using a random \&quot;k\&quot;, \&quot;k\&quot; might be derived deterministically from the input, using a&quot;</span>]
-    #[doc = <span class="string">&quot; sophisticated hash construction such as RFC 6979, or e.g. by hashing the private key, message hash and a&quot;</span>]
-    #[doc = <span class="string">&quot; retry counter, using a secure hash function such as SHA-256.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; The \&quot;result\&quot; parameter will contain the computed state, that is later to be passed to p256_sign_step2.&quot;</span>]
-    #[doc = <span class="string">&quot; A result state MUST NOT be reused for generating multiple signatures.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Creates an ECDSA signature, using a two-step procedure."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" This function performs the first of two steps, and accounts for 99% of the time spent for generating an"</span>]
+    #[doc = <span class="string">" ECDSA signature."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" By splitting up into two steps, most of the work could be spent before deciding what message to sign, or"</span>]
+    #[doc = <span class="string">" which private key to use."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" The parameter \"k\" shall consist of a 256-bit random integer value. This random value MUST be generated from"</span>]
+    #[doc = <span class="string">" a cryptographically secure random number generator, and MUST be unique for every pair of message hash and"</span>]
+    #[doc = <span class="string">" private key."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" With a small probability (~ 2^-32), this function will fail and return false for the given \"k\" and this"</span>]
+    #[doc = <span class="string">" function MUST in that case be called again with a new random \"k\", until true is returned. This is in line"</span>]
+    #[doc = <span class="string">" with the ECDSA standard."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" As an alternative to using a random \"k\", \"k\" might be derived deterministically from the input, using a"</span>]
+    #[doc = <span class="string">" sophisticated hash construction such as RFC 6979, or e.g. by hashing the private key, message hash and a"</span>]
+    #[doc = <span class="string">" retry counter, using a secure hash function such as SHA-256."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" The \"result\" parameter will contain the computed state, that is later to be passed to p256_sign_step2."</span>]
+    #[doc = <span class="string">" A result state MUST NOT be reused for generating multiple signatures."</span>]
     </span><span class="kw">pub fn </span>p256_sign_step1(result: <span class="kw-2">*mut </span>SignPrecomp, k: <span class="kw-2">*const </span>u32) -&gt; bool;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Second step of creating an ECDSA signature, using a two-step procedure.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; This function performs the second of two steps, and accounts for the last 1% of the time spent for generating&quot;</span>]
-    #[doc = <span class="string">&quot; an ECDSA signature.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; The \&quot;sign_precomp\&quot; parameter shall contain a pointer to a state generated by p256_sign_step1.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; With a small probability (~ 2^-256), this function will fail, due to the given \&quot;k\&quot; from the first step is&quot;</span>]
-    #[doc = <span class="string">&quot; not compatible with the rest of the input, and return false. In this case, the procedure MUST be started&quot;</span>]
-    #[doc = <span class="string">&quot; over from step 1 with a new random \&quot;k\&quot;.  This is in line with the ECDSA standard. Otherwise true is returned&quot;</span>]
-    #[doc = <span class="string">&quot; and the signature is placed in \&quot;r\&quot; and \&quot;s\&quot;.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; When this function returns, \&quot;sign_precomp\&quot; is also zeroed out and may hence not be reused.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Second step of creating an ECDSA signature, using a two-step procedure."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" This function performs the second of two steps, and accounts for the last 1% of the time spent for generating"</span>]
+    #[doc = <span class="string">" an ECDSA signature."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" The \"sign_precomp\" parameter shall contain a pointer to a state generated by p256_sign_step1."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" With a small probability (~ 2^-256), this function will fail, due to the given \"k\" from the first step is"</span>]
+    #[doc = <span class="string">" not compatible with the rest of the input, and return false. In this case, the procedure MUST be started"</span>]
+    #[doc = <span class="string">" over from step 1 with a new random \"k\".  This is in line with the ECDSA standard. Otherwise true is returned"</span>]
+    #[doc = <span class="string">" and the signature is placed in \"r\" and \"s\"."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" When this function returns, \"sign_precomp\" is also zeroed out and may hence not be reused."</span>]
     </span><span class="kw">pub fn </span>p256_sign_step2(
         r: <span class="kw-2">*mut </span>u32,
         s: <span class="kw-2">*mut </span>u32,
@@ -901,35 +902,35 @@
         sign_precomp: <span class="kw-2">*mut </span>SignPrecomp,
     ) -&gt; bool;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Calculates the public key from a given private key for use by either ECDSA or ECDH.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; The private key shall be taken from a random value that MUST have been generated by a cryptographically&quot;</span>]
-    #[doc = <span class="string">&quot; secure random number generator that generates 256 random bits. This function validates that the private key&quot;</span>]
-    #[doc = <span class="string">&quot; lies in the accepted range 1 to n-1, where n is the order of the elliptic curve, and returns true only if&quot;</span>]
-    #[doc = <span class="string">&quot; this validation succeeds. If random value is out of that range, false is returned and in this case a new&quot;</span>]
-    #[doc = <span class="string">&quot; random value needs to be generated and this function MUST be called again until true is returned.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; The public key is created by performing a scalar multiplication of the private key and the base point of&quot;</span>]
-    #[doc = <span class="string">&quot; the curve.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; Only use a keypair for either ECDSA or ECDH, not both, and don&#39;t use the private key for any other purposes.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Calculates the public key from a given private key for use by either ECDSA or ECDH."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" The private key shall be taken from a random value that MUST have been generated by a cryptographically"</span>]
+    #[doc = <span class="string">" secure random number generator that generates 256 random bits. This function validates that the private key"</span>]
+    #[doc = <span class="string">" lies in the accepted range 1 to n-1, where n is the order of the elliptic curve, and returns true only if"</span>]
+    #[doc = <span class="string">" this validation succeeds. If random value is out of that range, false is returned and in this case a new"</span>]
+    #[doc = <span class="string">" random value needs to be generated and this function MUST be called again until true is returned."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" The public key is created by performing a scalar multiplication of the private key and the base point of"</span>]
+    #[doc = <span class="string">" the curve."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" Only use a keypair for either ECDSA or ECDH, not both, and don't use the private key for any other purposes."</span>]
     </span><span class="kw">pub fn </span>p256_keygen(
         public_key_x: <span class="kw-2">*mut </span>u32,
         public_key_y: <span class="kw-2">*mut </span>u32,
         private_key: <span class="kw-2">*const </span>u32,
     ) -&gt; bool;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Generates the shared secret according to the ECDH standard.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; The shared secret parameter will contain the big endian encoding for the x coordinate of the scalar&quot;</span>]
-    #[doc = <span class="string">&quot; multiplication of the private key and the input point (other&#39;s public key), if the function succeeds.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; If the other&#39;s public key point does not lie on the curve, this function fails and false is returned.&quot;</span>]
-    #[doc = <span class="string">&quot; Otherwise, shared secret is calculated and true is returned.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; NOTE: The return value MUST be checked since the other&#39;s public key point cannot generally be trusted.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Generates the shared secret according to the ECDH standard."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" The shared secret parameter will contain the big endian encoding for the x coordinate of the scalar"</span>]
+    #[doc = <span class="string">" multiplication of the private key and the input point (other's public key), if the function succeeds."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" If the other's public key point does not lie on the curve, this function fails and false is returned."</span>]
+    #[doc = <span class="string">" Otherwise, shared secret is calculated and true is returned."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" NOTE: The return value MUST be checked since the other's public key point cannot generally be trusted."</span>]
     </span><span class="kw">pub fn </span>p256_ecdh_calc_shared_secret(
         shared_secret: <span class="kw-2">*mut </span>u8,
         private_key: <span class="kw-2">*const </span>u32,
@@ -937,24 +938,24 @@
         others_public_key_y: <span class="kw-2">*const </span>u32,
     ) -&gt; bool;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Raw scalar multiplication by the base point of the elliptic curve.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; This function can be used to implement custom algorithms using the P-256 curve.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; This function validates that the scalar lies in the accepted range 1 to n-1, where n is the order of the&quot;</span>]
-    #[doc = <span class="string">&quot; elliptic curve, and returns true only if this validation succeeds. Otherwise false is returned.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Raw scalar multiplication by the base point of the elliptic curve."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" This function can be used to implement custom algorithms using the P-256 curve."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" This function validates that the scalar lies in the accepted range 1 to n-1, where n is the order of the"</span>]
+    #[doc = <span class="string">" elliptic curve, and returns true only if this validation succeeds. Otherwise false is returned."</span>]
     </span><span class="kw">pub fn </span>p256_scalarmult_base(result_x: <span class="kw-2">*mut </span>u32, result_y: <span class="kw-2">*mut </span>u32, scalar: <span class="kw-2">*const </span>u32)
         -&gt; bool;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Raw scalar multiplication by any point on the elliptic curve.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; This function can be used to implement custom algorithms using the P-256 curve.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; This function validates all inputs and proceeds only if the scalar is within the range 1 to n-1, where n&quot;</span>]
-    #[doc = <span class="string">&quot; is the order of the elliptic curve, and the input point&#39;s coordinates are each less than the order of&quot;</span>]
-    #[doc = <span class="string">&quot; the prime field. If validation succeeds, true is returned. Otherwise false is returned.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Raw scalar multiplication by any point on the elliptic curve."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" This function can be used to implement custom algorithms using the P-256 curve."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" This function validates all inputs and proceeds only if the scalar is within the range 1 to n-1, where n"</span>]
+    #[doc = <span class="string">" is the order of the elliptic curve, and the input point's coordinates are each less than the order of"</span>]
+    #[doc = <span class="string">" the prime field. If validation succeeds, true is returned. Otherwise false is returned."</span>]
     </span><span class="kw">pub fn </span>p256_scalarmult_generic(
         result_x: <span class="kw-2">*mut </span>u32,
         result_y: <span class="kw-2">*mut </span>u32,
@@ -963,29 +964,29 @@
         in_y: <span class="kw-2">*const </span>u32,
     ) -&gt; bool;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Uncompressed encoding: \&quot;04 || Px || Py\&quot;.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Uncompressed encoding: \"04 || Px || Py\"."</span>]
     </span><span class="kw">pub fn </span>p256_point_to_octet_string_uncompressed(out: <span class="kw-2">*mut </span>u8, x: <span class="kw-2">*const </span>u32, y: <span class="kw-2">*const </span>u32);
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Compressed encoding: \&quot;02 || Px\&quot; if Py is even and \&quot;03 || Px\&quot; if Py is odd.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Compressed encoding: \"02 || Px\" if Py is even and \"03 || Px\" if Py is odd."</span>]
     </span><span class="kw">pub fn </span>p256_point_to_octet_string_compressed(out: <span class="kw-2">*mut </span>u8, x: <span class="kw-2">*const </span>u32, y: <span class="kw-2">*const </span>u32);
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Hybrid encoding: \&quot;06 || Px || Py\&quot; if Py is even and \&quot;07 || Px || Py\&quot; if Py is odd (a pretty useless encoding).&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Hybrid encoding: \"06 || Px || Py\" if Py is even and \"07 || Px || Py\" if Py is odd (a pretty useless encoding)."</span>]
     </span><span class="kw">pub fn </span>p256_point_to_octet_string_hybrid(out: <span class="kw-2">*mut </span>u8, x: <span class="kw-2">*const </span>u32, y: <span class="kw-2">*const </span>u32);
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Decodes a point according to the three encodings above.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; include_p256_decode_point: first byte is \&quot;04\&quot;, \&quot;06\&quot; or \&quot;07\&quot; and input length is 65 bytes&quot;</span>]
-    #[doc = <span class="string">&quot; include_p256_decompress_point: first byte is \&quot;02\&quot; or \&quot;03\&quot; and input length is 33 bytes&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; Returns true if the input string confirms to a valid encoding and the point lies on the curve,&quot;</span>]
-    #[doc = <span class="string">&quot; otherwise false.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; NOTE: The return value MUST be checked in case the point is not guaranteed to lie on the curve (e.g. if it&quot;</span>]
-    #[doc = <span class="string">&quot; is received from an untrusted party).&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Decodes a point according to the three encodings above."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" include_p256_decode_point: first byte is \"04\", \"06\" or \"07\" and input length is 65 bytes"</span>]
+    #[doc = <span class="string">" include_p256_decompress_point: first byte is \"02\" or \"03\" and input length is 33 bytes"</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" Returns true if the input string confirms to a valid encoding and the point lies on the curve,"</span>]
+    #[doc = <span class="string">" otherwise false."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" NOTE: The return value MUST be checked in case the point is not guaranteed to lie on the curve (e.g. if it"</span>]
+    #[doc = <span class="string">" is received from an untrusted party)."</span>]
     </span><span class="kw">pub fn </span>p256_octet_string_to_point(
         x: <span class="kw-2">*mut </span>u32,
         y: <span class="kw-2">*mut </span>u32,
@@ -993,17 +994,17 @@
         input_len_in_bytes: u32,
     ) -&gt; bool;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Checks that the argument, as little-endian integer, is a reduced non-zero element of the scalar field.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; In other words, that it is in the range `1..=n-1`, where `n = 2^256 - 2^224 + 2^192 - 0x4319055258e8617b0c46353d039cdaaf`.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Checks that the argument, as little-endian integer, is a reduced non-zero element of the scalar field."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" In other words, that it is in the range `1..=n-1`, where `n = 2^256 - 2^224 + 2^192 - 0x4319055258e8617b0c46353d039cdaaf`."</span>]
+    #[doc = <span class="string">""</span>]
     </span><span class="kw">pub fn </span>P256_check_range_n(a: <span class="kw-2">*const </span>u32) -&gt; bool;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Checks that the argument, as little-endian integer, is a reduced element of the base field.&quot;</span>]
-    #[doc = <span class="string">&quot;&quot;</span>]
-    #[doc = <span class="string">&quot; In other words, that it is in the range `0..=p-1`, where `p = 2^256 - 2^224 + 2^192 + 2^96 - 1`.&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Checks that the argument, as little-endian integer, is a reduced element of the base field."</span>]
+    #[doc = <span class="string">""</span>]
+    #[doc = <span class="string">" In other words, that it is in the range `0..=p-1`, where `p = 2^256 - 2^224 + 2^192 + 2^96 - 1`."</span>]
     </span><span class="kw">pub fn </span>P256_check_range_p(a: <span class="kw-2">*const </span>u32) -&gt; bool;
 }
 </code></pre></div></section></main></body></html>

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["der","hazmat","rfc6979"],"struct":["EncodedPoint","Error","Signature","SigningKey","VerifyingKey"],"trait":["Curve","NormalizeLow"],"type":["Result","SignatureBytes","SignatureSize"]};
+window.SIDEBAR_ITEMS = {"constant":["ECDSA_SHA224_OID","ECDSA_SHA256_OID","ECDSA_SHA384_OID","ECDSA_SHA512_OID"],"mod":["der","hazmat"],"struct":["Error","NormalizedSignature","RecoveryId","Signature","SignatureWithOid","SigningKey","VerifyingKey"],"trait":["PrimeCurve","SignatureEncoding"],"type":["EncodedPoint","Result","SignatureBytes","SignatureSize"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["ecdh","ecdsa"],"struct":["AffinePoint","BlindedScalar","NistP256","ProjectivePoint","Scalar"],"type":["CompressedPoint","EncodedPoint","FieldBytes","NonZeroScalar","PublicKey","ScalarBytes","SecretKey","U256"]};
+window.SIDEBAR_ITEMS = {"mod":["ecdh","ecdsa"],"struct":["NistP256","Scalar"],"type":["AffinePoint","BlindedScalar","CompressedPoint","EncodedPoint","FieldBytes","NonZeroScalar","ProjectivePoint","PublicKey","SecretKey","U256","U32"]};

@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/elliptic-curve-0.10.6/src/arithmetic.rs`."><title>arithmetic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="elliptic_curve" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../elliptic_curve/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/elliptic-curve-0.13.8/src/arithmetic.rs`."><title>arithmetic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="elliptic_curve" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../elliptic_curve/index.html"><img src="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg" alt="elliptic_curve"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -58,64 +59,116 @@
 <a href="#58" id="58">58</a>
 <a href="#59" id="59">59</a>
 <a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Elliptic curve arithmetic traits.
 
-</span><span class="kw">use crate</span>::{Curve, FieldBytes};
+</span><span class="kw">use crate</span>::{
+    ops::{Invert, LinearCombination, MulByGenerator, Reduce, ShrAssign},
+    point::AffineCoordinates,
+    scalar::{FromUintUnchecked, IsHigh},
+    Curve, FieldBytes, PrimeCurve, ScalarPrimitive,
+};
 <span class="kw">use </span>core::fmt::Debug;
-<span class="kw">use </span>subtle::{ConditionallySelectable, ConstantTimeEq};
+<span class="kw">use </span>subtle::{ConditionallySelectable, ConstantTimeEq, CtOption};
+<span class="kw">use </span>zeroize::DefaultIsZeroes;
 
-<span class="doccomment">/// Elliptic curve with affine arithmetic implementation.
-</span><span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;arithmetic&quot;</span>)))]
-</span><span class="kw">pub trait </span>AffineArithmetic: Curve + ScalarArithmetic {
+<span class="doccomment">/// Elliptic curve with an arithmetic implementation.
+</span><span class="kw">pub trait </span>CurveArithmetic: Curve {
     <span class="doccomment">/// Elliptic curve point in affine coordinates.
-    </span><span class="kw">type </span>AffinePoint: Copy
-        + Clone
+    </span><span class="kw">type </span>AffinePoint: <span class="lifetime">'static
+        </span>+ AffineCoordinates&lt;FieldRepr = FieldBytes&lt;<span class="self">Self</span>&gt;&gt;
+        + Copy
         + ConditionallySelectable
         + ConstantTimeEq
         + Debug
         + Default
+        + DefaultIsZeroes
+        + Eq
+        + PartialEq
         + Sized
         + Send
-        + Sync
-        + <span class="lifetime">&#39;static</span>;
-}
+        + Sync;
 
-<span class="doccomment">/// Elliptic curve with projective arithmetic implementation.
-</span><span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;arithmetic&quot;</span>)))]
-</span><span class="kw">pub trait </span>ProjectiveArithmetic: Curve + AffineArithmetic {
     <span class="doccomment">/// Elliptic curve point in projective coordinates.
     ///
-    /// Note: the following bounds are enforced by [`group::Group`]:
-    /// - `Copy`
-    /// - `Clone`
-    /// - `Debug`
-    /// - `Eq`
-    /// - `Sized`
-    /// - `Send`
-    /// - `Sync`
+    /// Note: the following bounds are provided by [`group::Group`]:
+    /// - `'static`
+    /// - [`Copy`]
+    /// - [`Clone`]
+    /// - [`Debug`]
+    /// - [`Eq`]
+    /// - [`Sized`]
+    /// - [`Send`]
+    /// - [`Sync`]
     </span><span class="kw">type </span>ProjectivePoint: ConditionallySelectable
         + ConstantTimeEq
         + Default
+        + DefaultIsZeroes
         + From&lt;<span class="self">Self</span>::AffinePoint&gt;
         + Into&lt;<span class="self">Self</span>::AffinePoint&gt;
+        + LinearCombination
+        + MulByGenerator
         + group::Curve&lt;AffineRepr = <span class="self">Self</span>::AffinePoint&gt;
         + group::Group&lt;Scalar = <span class="self">Self</span>::Scalar&gt;;
+
+    <span class="doccomment">/// Scalar field modulo this curve's order.
+    ///
+    /// Note: the following bounds are provided by [`ff::Field`]:
+    /// - `'static`
+    /// - [`Copy`]
+    /// - [`Clone`]
+    /// - [`ConditionallySelectable`]
+    /// - [`ConstantTimeEq`]
+    /// - [`Debug`]
+    /// - [`Default`]
+    /// - [`Send`]
+    /// - [`Sync`]
+    </span><span class="kw">type </span>Scalar: AsRef&lt;<span class="self">Self</span>::Scalar&gt;
+        + DefaultIsZeroes
+        + From&lt;ScalarPrimitive&lt;<span class="self">Self</span>&gt;&gt;
+        + FromUintUnchecked&lt;Uint = <span class="self">Self</span>::Uint&gt;
+        + Into&lt;FieldBytes&lt;<span class="self">Self</span>&gt;&gt;
+        + Into&lt;ScalarPrimitive&lt;<span class="self">Self</span>&gt;&gt;
+        + Into&lt;<span class="self">Self</span>::Uint&gt;
+        + Invert&lt;Output = CtOption&lt;<span class="self">Self</span>::Scalar&gt;&gt;
+        + IsHigh
+        + PartialOrd
+        + Reduce&lt;<span class="self">Self</span>::Uint, Bytes = FieldBytes&lt;<span class="self">Self</span>&gt;&gt;
+        + ShrAssign&lt;usize&gt;
+        + ff::Field
+        + ff::PrimeField&lt;Repr = FieldBytes&lt;<span class="self">Self</span>&gt;&gt;;
 }
 
-<span class="doccomment">/// Scalar arithmetic.
-</span><span class="attr">#[cfg(feature = <span class="string">&quot;arithmetic&quot;</span>)]
-#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;arithmetic&quot;</span>)))]
-</span><span class="kw">pub trait </span>ScalarArithmetic: Curve {
-    <span class="doccomment">/// Scalar field type.
-    ///
-    /// Note: the following bounds are enforced by [`ff::Field`]:
-    /// - `Copy`
-    /// - `Clone`
-    /// - `ConditionallySelectable`
-    /// - `Debug`
-    /// - `Default`
-    /// - `Send`
-    /// - `Sync`
-    </span><span class="kw">type </span>Scalar: ConstantTimeEq + ff::Field + ff::PrimeField&lt;Repr = FieldBytes&lt;<span class="self">Self</span>&gt;&gt;;
+<span class="doccomment">/// Prime order elliptic curve with projective arithmetic implementation.
+</span><span class="kw">pub trait </span>PrimeCurveArithmetic:
+    PrimeCurve + CurveArithmetic&lt;ProjectivePoint = <span class="self">Self</span>::CurveGroup&gt;
+{
+    <span class="doccomment">/// Prime order elliptic curve group.
+    </span><span class="kw">type </span>CurveGroup: group::prime::PrimeCurve&lt;Affine = &lt;<span class="self">Self </span><span class="kw">as </span>CurveArithmetic&gt;::AffinePoint&gt;;
 }
 </code></pre></div></section></main></body></html>
